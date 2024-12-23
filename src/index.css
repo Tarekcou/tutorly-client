@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a.active {
+  background-color: rgb(47, 134, 211);
+}
+.swiper-button-prev {
+  color: red;
+}
+
+.swiper-button-next {
+  color: #000;
+}
