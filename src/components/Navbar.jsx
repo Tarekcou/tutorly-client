@@ -93,7 +93,7 @@ const Navbar = () => {
       <NavLink to="/" className="btn btn-outline btn-sm">
         Home
       </NavLink>
-      <NavLink to="/findTutors" className="btn btn-outline btn-sm">
+      <NavLink to="/find-tutors" className="btn btn-outline btn-sm">
         Find Tutors
       </NavLink>
 
@@ -109,7 +109,7 @@ const Navbar = () => {
             My Tutorials
           </NavLink>
           <NavLink
-            to={`/bookedTutorials/${user.email}`}
+            to={`/booked-tutors/${user.email}`}
             className="btn btn-outline btn-sm"
           >
             My Booked Tutors
@@ -169,12 +169,12 @@ const Navbar = () => {
         {/* right side */}
         <div className="flex justify-center items-center gap-2">
           <div className="md:!block hidden">{signInSignOutToggle}</div>
-          <Link to={"/main/checkOut"} className="relative">
+          {/* <Link to={"/main/checkOut"} className="relative">
             <p className="-top-2 -right-2 absolute font-bold text-yellow-500">
               {cart.length}{" "}
             </p>
             <FaCartPlus className="text-3xl text-green-500" />
-          </Link>
+          </Link> */}
           <div className="form-control">
             <label className="cursor-pointer label">
               <span className="mx-1 text-blue-400 label-text">

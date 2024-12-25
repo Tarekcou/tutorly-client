@@ -1,25 +1,27 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../provider/AuthProvider";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
-const AddTutorials = () => {
+const UpdateTutorials = () => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
+  const navigate = useNavigate();
   // console.log(location.state.tutorial);
   // State to handle form data
   const [rating, setRating] = useState(0);
 
-  const [formData, setFormData] = useState({
-    image: "",
-    language: "",
-    price: "",
-    description: "",
-    review: 0,
-    rating: rating,
-    country: "", // Default review
-  });
+  const [formData, setFormData] = useState(
+    location.state.tutorial || {
+      image: "",
+      language: "",
+      price: "",
+      description: "",
+      review: 0,
+      rating: rating,
+      country: "", // Default review
+    }
+  );
   const countries = [
     "United States",
     "India",
@@ -76,22 +78,18 @@ const AddTutorials = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  // console.log(formData);
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    const dataToSubmit = {
-      name: user.displayName,
-      email: user.email,
-      ...formData,
-    };
-    // console.log(dataToSubmit);
+    console.log(formData._id);
     try {
-      const response = await axios.post(
-        "http://localhost:5005/add-tutorials",
-        dataToSubmit
+      const response = await axios.put(
+        `http://localhost:5005/tutorials/${formData._id}`,
+        formData
       );
-      if (response.status === 201) {
-        alert("Tutorial added successfully!");
+      console.log("Updated tutorial:", response.data);
+      if (response.data.modifiedCount > 0) {
+        // alert("Tutorial added successfully!");
+        navigate(`/myTutorials/${formData.email}`);
         setFormData({
           image: "",
           language: "",
@@ -101,20 +99,25 @@ const AddTutorials = () => {
           rating: rating,
           country: "",
         });
+        Swal.fire({
+          title: "success!",
+          text: "Do you want to continue",
+          icon: "success",
+          confirmButtonText: "ok",
+        });
       }
     } catch (error) {
-      console.error("Error saving tutorial:", error);
-      alert("Failed to save tutorial.");
+      console.error("Error updating tutorial:", error);
+      alert("Failed to update tutorial.");
     }
   };
-
   return (
     <div className="flex justify-center items-center bg-gradient-to-br from-slate-100 to-slate-200 mx-auto mt-28 py-10 min-h-screen">
       <div className="bg-white shadow-lg p-8 rounded-lg w-9/12 md:w-7/12">
         <h1 className="mb-6 font-bold text-3xl text-center text-gray-800">
-          Add Your Tutorial
+          Update Your Tutorial
         </h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleUpdate}>
           {/* Name (Read-only) */}
           <div className="mb-4">
             <label className="block font-semibold text-gray-700">Name</label>
@@ -269,7 +272,7 @@ const AddTutorials = () => {
             type="submit"
             className="bg-gradient-to-r from-green-400 hover:from-green-500 to-blue-500 hover:to-blue-600 py-3 rounded-lg w-full font-bold text-white transition duration-300"
           >
-            {location.state ? "Update Tutorial" : "Submit Tutorial"}
+            Update Tutorial
           </button>
         </form>
       </div>
@@ -277,4 +280,4 @@ const AddTutorials = () => {
   );
 };
 
-export default AddTutorials;
+export default UpdateTutorials;
