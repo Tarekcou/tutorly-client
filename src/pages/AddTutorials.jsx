@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../provider/AuthProvider";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const AddTutorials = () => {
@@ -9,6 +9,7 @@ const AddTutorials = () => {
   const location = useLocation();
   // console.log(location.state.tutorial);
   // State to handle form data
+  const navigate = useNavigate();
   const [rating, setRating] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -45,6 +46,7 @@ const AddTutorials = () => {
   // Popular languages
   const languages = [
     "English",
+    "Bangla",
     "Spanish",
     "Mandarin",
     "Hindi",
@@ -90,8 +92,9 @@ const AddTutorials = () => {
         "http://localhost:5005/add-tutorials",
         dataToSubmit
       );
-      if (response.status === 201) {
-        alert("Tutorial added successfully!");
+      // console.log(response);
+      if (response.status === 200) {
+        // alert("Tutorial added successfully!");
         setFormData({
           image: "",
           language: "",
@@ -101,6 +104,12 @@ const AddTutorials = () => {
           rating: rating,
           country: "",
         });
+        Swal.fire({
+          title: "One Tutorial Added !",
+          text: "Congratulation one tutorial added!",
+          icon: "success",
+        });
+        navigate(`/myTutorials/${user.email}`);
       }
     } catch (error) {
       console.error("Error saving tutorial:", error);

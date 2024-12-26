@@ -1,9 +1,40 @@
+import axios from "axios";
 import React from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
 const TutorCard = ({ tutor, user }) => {
-  console.log(tutor);
+  const navigate = useNavigate();
+  // console.log(tutor);
+  const handleBooked = () => {
+    const bookedTutor = {
+      tutorId: tutor._id,
+      image: tutor.image,
+      language: tutor.language,
+      price: tutor.price,
+      country: tutor.country,
+      review: tutor.review,
+      tutorEmail: tutor.email,
+      email: user.email,
+      // Assuming user ID is stored in a global state
+    };
+    axios
+      .post("http://localhost:5005/add-booked-tutorials", bookedTutor)
+      .then((res) => {
+        console.log(res);
+        // console.log(res);
+        if (res.status == 200) {
+          Swal.fire({
+            title: "Booked this tutorial!",
+            text: "You booked the tutorial!",
+            icon: "success",
+          });
+          navigate(`/booked-tutors/${user.email}`);
+        }
+      });
+  };
   return (
     <div>
       <div className="relative flex gap-3 h-auto min-h-44 group">
@@ -41,7 +72,10 @@ const TutorCard = ({ tutor, user }) => {
                 ${tutor.price} / 50-min lesson
               </p>
             </div>
-            <button className="bg-pink-500 hover:bg-pink-600 mt-2 rounded-lg text-white btn">
+            <button
+              onClick={handleBooked}
+              className="bg-pink-500 hover:bg-pink-600 mt-2 rounded-lg text-white btn"
+            >
               Book trial lesson
             </button>
             <button className="text-gray-800 btn btn-warning">

@@ -86,8 +86,8 @@ const UpdateTutorials = () => {
         `http://localhost:5005/tutorials/${formData._id}`,
         formData
       );
-      console.log("Updated tutorial:", response.data);
-      if (response.data.modifiedCount > 0) {
+      console.log("Updated tutorial:", response);
+      if (response.status === 200) {
         // alert("Tutorial added successfully!");
         navigate(`/myTutorials/${formData.email}`);
         setFormData({
@@ -100,7 +100,7 @@ const UpdateTutorials = () => {
           country: "",
         });
         Swal.fire({
-          title: "success!",
+          title: "Updated one tuitorial!",
           text: "Do you want to continue",
           icon: "success",
           confirmButtonText: "ok",

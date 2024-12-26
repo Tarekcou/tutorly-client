@@ -1,7 +1,38 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import startedImage from "../assets/startedImage.jpg";
 const GetStartedPage = () => {
+  const location = useLocation();
+  const [language, setLanguage] = useState(location?.state);
+  // Popular languages
+  const languages = [
+    "English",
+    "Bangla",
+    "Spanish",
+    "Mandarin",
+    "Hindi",
+    "French",
+    "German",
+    "Russian",
+    "Japanese",
+    "Portuguese",
+    "Arabic",
+    "Korean",
+    "Italian",
+    "Turkish",
+    "Dutch",
+    "Swedish",
+    "Polish",
+    "Greek",
+    "Czech",
+    "Hebrew",
+    "Danish",
+  ];
+  const handleLanguageChange = (e) => {
+    console.log(e.target.value);
+    setLanguage(e.target.value);
+  };
+  console.log(location);
   return (
     <div
       className="flex justify-center items-center gap-10 space-y-5 mx-auto min-h-screen"
@@ -17,23 +48,40 @@ const GetStartedPage = () => {
             <div className="label">
               <span className="label-text">What do you want to learn?</span>
             </div>
-            <div className="flex w-full">
-              <select className="w-full select-bordered select">
-                <option disabled selected>
-                  Pick one
-                </option>
-                <option>Star Wars</option>
-                <option>Harry Potter</option>
-                <option>Lord of the Rings</option>
-                <option>Planet of the Apes</option>
-                <option>Star Trek</option>
-              </select>
-              <button className="btn btn-neutral">Get Started</button>
+            <div className="flex items-center mb-4 w-full join">
+              {/* Language Dropdown */}
+              <div className="border w-full join-item">
+                {/* <label className="block font-semibold text-gray-700">
+                  Language
+                </label> */}
+                <select
+                  name="language"
+                  defaultValue={language}
+                  onChange={handleLanguageChange}
+                  className="p-3 border w-full"
+                  required
+                >
+                  <option value="" disabled>
+                    Select a language
+                  </option>
+                  {languages.map((lang, index) => (
+                    <option key={index} value={lang}>
+                      {lang}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <Link
+                to={`/find-tutors/${location.state}`}
+                className="btn btn-neutral join-item"
+              >
+                Get Started
+              </Link>
             </div>
           </label>
         </div>
-        <Link to={"/"} className="py-10 text-underline">
-          Choose by myself from 3000+ Tutors
+        <Link to={"/find-tutors"} className="py-10 underline">
+          Choose from 3000+ Tutors
         </Link>
       </div>
       <div>

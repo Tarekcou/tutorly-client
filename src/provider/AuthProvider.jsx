@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
@@ -113,18 +114,45 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(true);
       if (user) {
         setUser(user);
         const uid = user.uid;
         // (user)
-        setLoading(false);
-        setimageKey((pre) => pre + 1);
-      } else {
+        //   if (user?.email) {
+        //     const currentUser = { email: user.email };
+        //     console.log(currentUser);
+        //     axios
+        //       .post("http://localhost:5005/jwt", currentUser, {
+        //         withCredential: true,
+        //       })
+        //       .then((res) => {
+        //         console.log("login", res.data);
+        //         setLoading(false);
+        //       });
+        //   } else {
+        //     axios
+        //       .post(
+        //         "http://localhost:5005/logout",
+        //         {},
+        //         {
+        //           withCredential: true,
+        //         }
+        //       )
+        //       .then((res) => {
+        //         console.log("logout", res.data);
+        //         setLoading(false);
+        //       });
+        //   }
+        //   setimageKey((pre) => pre + 1);
+        // } else {
+        //   setLoading(false);
+        // }
         setLoading(false);
       }
     });
+    return () => unsubscribe(); // Unsubscribe on unmount to avoid memory
   }, []);
   const authData = {
     registerWithEmail,

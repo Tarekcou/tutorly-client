@@ -30,9 +30,13 @@ const router = createBrowserRouter([
         loader: async () => {
           const res = await fetch("http://localhost:5005/tutorials");
           const data = await res.json();
-          console.log(data);
+          // console.log(data);
           return data;
         },
+      },
+      {
+        path: "/find-tutors/get-started",
+        element: <GetStartedPage />,
       },
       {
         path: "/find-tutors/:language",
@@ -78,16 +82,16 @@ const router = createBrowserRouter([
             <MyTutorials />
           </PrivateRouter>
         ),
-        loader: async ({ params }) => {
-          // console.log(params);
-          const res = await fetch(
-            `http://localhost:5005/myTutorials/${params.myEmail}`
-          );
-          const data = await res.json();
-          console.log(data);
+        // loader: async ({ params }) => {
+        //   // console.log(params);
+        //   const res = await fetch(
+        //     `http://localhost:5005/myTutorials/${params.myEmail}`
+        //   );
+        //   const data = await res.json();
+        //   console.log(data);
 
-          return data;
-        },
+        //   return data;
+        // },
       },
       {
         path: "/booked-tutors/:myEmail",
@@ -97,7 +101,7 @@ const router = createBrowserRouter([
           </PrivateRouter>
         ),
         loader: async ({ params }) => {
-          console.log(params);
+          // console.log(params);
           const res = await fetch(
             `http://localhost:5005/booked-tutors/${params.myEmail}`
           );

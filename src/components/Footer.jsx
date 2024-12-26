@@ -1,5 +1,5 @@
 import React from "react";
-
+import logo from "../assets/logo.png";
 const Footer = () => {
   return (
     <footer className="bg-blue-900 py-12 text-gray-300">
@@ -8,7 +8,9 @@ const Footer = () => {
         <div className="gap-8 grid grid-cols-1 md:grid-cols-3">
           {/* Brand Section */}
           <div>
-            <h1 className="font-bold text-2xl text-white">Tutorly</h1>
+            <h1 className="flex items-center gap-2 font-bold text-2xl text-white">
+              <img className="w-6 h-6" src={logo} /> Tutorly
+            </h1>
             <p className="mt-4 text-sm">
               Connecting learners with expert tutors worldwide. Join us to make
               learning easy, accessible, and personalized.

@@ -20,7 +20,9 @@ const TutorCategories = () => {
       <div className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category, index) => (
           <Link
-            to={"/find-tutors/" + category.name.split(" ")[0]}
+            to={"/find-tutors/get-started"}
+            state={category.name.split(" ")[0]}
+            // to={"/find-tutors/" + category.name.split(" ")[0]}
             key={index}
             className="flex justify-between items-center hover:shadow-lg p-4 border rounded-lg transition-shadow duration-200 cursor-pointer"
           >

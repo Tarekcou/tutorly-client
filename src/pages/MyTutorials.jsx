@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router-dom";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const MyTutorials = () => {
-  const tutorials = useLoaderData();
+  // const tutorials = useLoaderData();
   // console.log(tutorials);
   const [selectedTutorial, setSelectedTutorial] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+  const [tutorials, setTutorials] = useState([]);
+  const params = useParams();
+  const axiosSecure = useAxiosSecure();
+  useEffect(() => {
+    // Fetch data from the server
+    axios
+      .get(`http://localhost:5005/myTutorials/${params.myEmail}`)
+      .then((res) => setTutorials(res.data));
+  }, []);
   const handleDelete = async (id) => {
     console.log(id);
     try {
       await axios
         .delete(`http://localhost:5005/tutorials/${id}`)
         .then((data) => {
+          console.log(data);
           if (data.status === 200) {
             Swal.fire({
               title: "success!",

@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 import { FaUserAlt } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
-
+import logo from "../assets/logo.png";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, logOut, imageKey, cart, theme, setTheme } =
@@ -89,28 +89,31 @@ const Navbar = () => {
     </>
   );
   const navMenu = (
-    <div className="flex lg:flex-row flex-col justify-center gap-2">
-      <NavLink to="/" className="btn btn-outline btn-sm">
+    <div className="flex lg:flex-row flex-col justify-center gap-2 text-white">
+      <NavLink to="/" className="bg-white btn btn-outline btn-sm">
         Home
       </NavLink>
-      <NavLink to="/find-tutors" className="btn btn-outline btn-sm">
+      <NavLink to="/find-tutors" className="bg-white btn btn-outline btn-sm">
         Find Tutors
       </NavLink>
 
       {user ? (
         <div className="flex lg:flex-row flex-col gap-2">
-          <NavLink to="/addTutorials" className="btn btn-outline btn-sm">
+          <NavLink
+            to="/addTutorials"
+            className="bg-white btn btn-outline btn-sm"
+          >
             Add Tutorials
           </NavLink>
           <NavLink
             to={`/myTutorials/${user.email}`}
-            className="btn btn-outline btn-sm"
+            className="bg-white btn btn-outline btn-sm"
           >
             My Tutorials
           </NavLink>
           <NavLink
             to={`/booked-tutors/${user.email}`}
-            className="btn btn-outline btn-sm"
+            className="bg-white btn btn-outline btn-sm"
           >
             My Booked Tutors
           </NavLink>
@@ -118,7 +121,7 @@ const Navbar = () => {
       ) : (
         ""
       )}
-      <NavLink to={`/contact`} className="btn btn-outline btn-sm">
+      <NavLink to={`/contact`} className="bg-white btn btn-outline btn-sm">
         Contact
       </NavLink>
     </div>
@@ -157,8 +160,11 @@ const Navbar = () => {
               {signInSignOutToggle}
             </ul>
           </div>
-          <Link to={"/"} className="font-bold text-2xl text-orange-500">
-            Tutorly
+          <Link
+            to={"/"}
+            className="flex items-center gap-1 font-bold text-2xl text-orange-500"
+          >
+            <img className="rounded-full w-6 h-6" src={logo} /> Tutorly
           </Link>
         </div>
         {/* middle area */}

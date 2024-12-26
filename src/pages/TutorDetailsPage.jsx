@@ -13,7 +13,7 @@ const TutorDetailsPage = () => {
   if (!tutor) {
     return <p className="mt-28 text-red-500">No tutor data available.</p>;
   }
-  console.log(tutor.tutorId);
+  // console.log(tutor.tutorId);
   const handleBooked = () => {
     const bookedTutor = {
       tutorId: tutor._id,
