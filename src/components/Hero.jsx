@@ -5,17 +5,21 @@ import three from "../assets/three.jpg";
 import four from "../assets/four.jpg";
 import Navbar from "./Navbar";
 import { FaArrowRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
     <div className="relative">
-      <div className="top-1/3 right-1/3 z-50 absolute space-y-5 w-1/2 text-white">
-        <h1 className="font-bold text-6xl">
+      <div className="top-1/3 md:right-1/2 left-1/3 z-10 absolute space-y-5 w-1/2 text-white">
+        <h1 className="font-bold text-4xl md:text-6xl">
           Learn faster with your best language tutor.
         </h1>
-        <button className="text-xl btn btn-neutral">
+        <Link
+          to={"/find-tutors"}
+          className="text-xl btn btn-neutral btn-sm md:btn-md"
+        >
           Get Started <FaArrowRight />
-        </button>
+        </Link>
       </div>
       <div className="relative w-full h-[calc(100vh-50px)] carousel">
         <div id="slide1" className="relative w-full carousel-item">

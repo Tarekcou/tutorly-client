@@ -1,5 +1,6 @@
 import React from "react";
 import tutor from "../assets/tutor.jpg";
+import { Link } from "react-router-dom";
 const BecomeTutor = () => {
   return (
     <div className="flex md:flex-row flex-col items-center bg-teal-300 shadow-lg p-8 md:p-16 rounded-lg">
@@ -27,9 +28,12 @@ const BecomeTutor = () => {
           <li>✔ Get paid securely</li>
         </ul>
         <div className="flex sm:flex-row flex-col sm:items-center sm:space-x-4 space-y-4 sm:space-y-0">
-          <button className="bg-black hover:bg-gray-800 shadow px-6 py-3 rounded-lg text-white">
+          <Link
+            to={"/addTutorials"}
+            className="bg-black hover:bg-gray-800 shadow px-6 py-3 rounded-lg text-white"
+          >
             Become a tutor →
-          </button>
+          </Link>
           <a href="#" className="text-teal-900 hover:text-teal-700 underline">
             How our platform works
           </a>

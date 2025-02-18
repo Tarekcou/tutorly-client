@@ -21,7 +21,10 @@ const TutorCard = ({ tutor, user }) => {
       // Assuming user ID is stored in a global state
     };
     axios
-      .post("http://localhost:5005/add-booked-tutorials", bookedTutor)
+      .post(
+        "https://tutor-booking-server-olive.vercel.app/add-booked-tutorials",
+        bookedTutor
+      )
       .then((res) => {
         console.log(res);
         // console.log(res);
@@ -37,15 +40,15 @@ const TutorCard = ({ tutor, user }) => {
   };
   return (
     <div>
-      <div className="relative flex gap-3 h-auto min-h-44 group">
-        <div className="flex items-center gap-3 bg-white shadow-lg py-5 p-3 rounded-lg hover:ring-2 w-9/12 group">
-          <div className="flex items-center gap-3 w-8/12">
+      <div className="relative flex md:flex-row flex-col gap-3 h-auto min-h-44 group">
+        <div className="flex md:flex-row flex-col items-center gap-3 bg-white shadow-lg py-5 p-3 rounded-lg hover:ring-2 w-full md:w-9/12 group">
+          <div className="flex md:flex-row flex-col items-center gap-3 w-8/12">
             <img
               src={tutor?.image}
               alt={tutor?.name}
               className="rounded-full w-32 h-32"
             />
-            <div className="">
+            <div className="p-4">
               <h3 className="font-bold text-xl">{user?.displayName}</h3>
               <h3 className="text-base">{user?.language}</h3>
               <p className="flex items-center gap-1 text-base text-gray-600">
@@ -57,9 +60,9 @@ const TutorCard = ({ tutor, user }) => {
               <p className="mt-2 text-gray-700">{tutor.description}</p>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center gap-2 w-4/12 text-center">
+          <div className="flex flex-row md:flex-col justify-center items-center gap-3 md:w-4/12 text-center">
             <div>
-              <div className="flex justify-center items-center gap-3 text-center">
+              <div className="flex md:flex-row flex-col justify-center items-center gap-3 text-center">
                 <span className="flex items-center gap-1 font-bold text-yellow-500">
                   {tutor.rating}
                   <FaStar />
@@ -72,18 +75,23 @@ const TutorCard = ({ tutor, user }) => {
                 ${tutor.price} / 50-min lesson
               </p>
             </div>
-            <button
-              onClick={handleBooked}
-              className="bg-pink-500 hover:bg-pink-600 mt-2 rounded-lg text-white btn"
-            >
-              Book trial lesson
-            </button>
-            <button className="text-gray-800 btn btn-warning">
-              Send message
-            </button>
+            <div>
+              <button
+                onClick={handleBooked}
+                className="bg-pink-500 hover:bg-pink-600 mt-2 rounded-lg text-white btn btn-sm"
+              >
+                Book trial lesson
+              </button>
+              <Link
+                to={"/contact"}
+                className="text-gray-800 btn btn-sm btn-warning"
+              >
+                Send message
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="group-hover:flex top-0 -right-4 absolute justify-center items-center hidden bg-white shadow-lg w-3/12 h-full card">
+        <div className="group-hover:flex top-0 -right-4 absolute justify-center items-center hidden bg-white shadow-lg w-full md:w-3/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"
@@ -95,7 +103,7 @@ const TutorCard = ({ tutor, user }) => {
               state={{ tutor }}
               className="w-full btn btn-outline btn-sm"
             >
-              View Details Schedule
+              View Details
             </Link>
           </div>
         </div>

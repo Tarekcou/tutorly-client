@@ -15,14 +15,16 @@ const MyTutorials = () => {
   useEffect(() => {
     // Fetch data from the server
     axios
-      .get(`http://localhost:5005/myTutorials/${params.myEmail}`)
+      .get(
+        `https://https://tutor-booking-server-olive.vercel.app/myTutorials/${params.myEmail}`
+      )
       .then((res) => setTutorials(res.data));
   }, []);
   const handleDelete = async (id) => {
     console.log(id);
     try {
       await axios
-        .delete(`http://localhost:5005/tutorials/${id}`)
+        .delete(`https://tutor-booking-server-olive.vercel.app/tutorials/${id}`)
         .then((data) => {
           console.log(data);
           if (data.status === 200) {
@@ -54,7 +56,13 @@ const MyTutorials = () => {
     setShowModal(false);
     setSelectedTutorial(null);
   };
-
+  if (tutorials.length == 0) {
+    return (
+      <div className="mt-44 text-center text-gray-700">
+        You have not created any tutorials yet.
+      </div>
+    );
+  }
   return (
     <div className="mt-32 p-8">
       <h1 className="mb-6 font-bold text-2xl">My Tutorials</h1>

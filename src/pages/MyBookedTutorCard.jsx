@@ -10,15 +10,23 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
   // const gettutors = location.state?.tutors; // Destructure the passed tutors object
   console.log(tutor);
   const [tutors, setTutors] = useState(tutor);
+  // const [updateReview, setUpdateReview] = useState(tutors?.review);
   const handleReview = async () => {
     console.log("booke tutors card review");
     console.log(tutors);
+    // setUpdateReview(232);
 
     const reviewId = { reviewId: tutors._id };
-    const response = await axios.post(
-      `http://localhost:5005/review/${tutors?.tutorId}`,
-      reviewId
-    );
+    setTutors((prevtutorss) => ({
+      ...prevtutorss,
+      review: tutors.review + 1,
+    }));
+    const response = await axios
+      .post(
+        `https://tutor-booking-server-olive.vercel.app/review/${tutors?.tutorId}`,
+        reviewId
+      )
+      .then((response) => console.log(response));
     setTutors((prevtutorss) => ({
       ...prevtutorss,
       review: tutors.review + 1,
@@ -45,9 +53,9 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
   console.log(tutors._id);
   return (
     <div>
-      <div className="relative flex gap-3 h-auto min-h-44 group">
-        <div className="flex items-center gap-3 bg-white shadow-lg py-5 p-3 rounded-lg hover:ring-2 w-9/12 group">
-          <div className="flex items-center gap-3 w-8/12">
+      <div className="relative flex md:flex-row flex-col gap-5 h-auto min-h-44 group">
+        <div className="flex md:flex-row flex-col items-center gap-3 bg-white shadow-lg py-5 p-3 rounded-lg hover:ring-2 md:w-9/12 group">
+          <div className="flex md:flex-row flex-col items-center gap-3 w-8/12">
             <img
               src={tutors?.image}
               alt={tutors?.name}
@@ -61,35 +69,37 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
                 {tutors.country}
               </p>
               <p>Language: {tutors.language}</p>
+              <p className="font-bold text-pink-600">
+                ${tutors.price} / 50-min lesson
+              </p>
 
               <p className="mt-2 text-gray-700">{tutors.description}</p>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center gap-2 w-4/12 text-center">
+          <div className="flex flex-row md:flex-col justify-center items-center gap-2 w-4/12 text-center">
             <div>
-              <div className="flex justify-center items-center gap-3 text-center">
+              <div className="flex justify-center items-center md:gap-3 text-center">
                 {/* <span className="flex items-center gap-1 font-bold text-yellow-500">
                   {tutors.rating}
                   <FaStar />
                 </span> */}
-                <span className="text-gray-600">{tutors.review} reviews</span>
+                <span className="md:px-6 border btn btn-info btn-sm">
+                  {tutors.review} reviews
+                </span>
               </div>
-              <p className="font-bold text-pink-600">
-                ${tutors.price} / 50-min lesson
-              </p>
             </div>
             <button
               onClick={handleReview}
-              className="px-6 py-2 border rounded-lg text-gray-600 btn btn-warning"
+              className="md:px-6 md:py-2 border rounded-lg text-gray-600 btn btn-sm btn-warning"
             >
               Add Review
             </button>
-            <button className="text-gray-800 btn btn-outline">
+            <button className="text-gray-800 btn btn-outline btn-sm">
               Send message
             </button>
           </div>
         </div>
-        <div className="group-hover:flex top-0 -right-4 absolute justify-center items-center hidden bg-white shadow-lg w-3/12 h-full card">
+        <div className="group-hover:flex md:top-0 md:right-0 md:absolute justify-center items-center hidden bg-white shadow-lg mx-auto w-10/12 md:w-3/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"
@@ -97,11 +107,11 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
               alt=""
             />
             <Link
-              to={"/tutors/details"}
+              to={"/tutor/details"}
               state={{ tutors }}
               className="w-full btn btn-outline btn-sm"
             >
-              View Details Schedule
+              View Details
             </Link>
           </div>
         </div>

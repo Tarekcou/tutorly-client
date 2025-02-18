@@ -128,7 +128,7 @@ const Navbar = () => {
   );
   return (
     <>
-      <div className="flex justify-between items-center bg-none mx-auto my-5 md:w-11/12 absolue">
+      <div className="flex justify-between items-center bg-none mx-auto my-2 md:w-11/12 absolue">
         {/* left side */}
         <div className="flex justify-center items-center">
           <div className="block lg:!hidden dropdown">
@@ -154,7 +154,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="z-20 bg-base-100 shadow mt-3 p-2 rounded-box w-52 dropdown-content menu menu-sm"
+              className="z-100 bg-base-100 shadow mt-3 p-2 rounded-box w-52 dropdown-content menu menu-sm"
             >
               {navMenu}
               {signInSignOutToggle}

@@ -83,7 +83,7 @@ const UpdateTutorials = () => {
     console.log(formData._id);
     try {
       const response = await axios.put(
-        `http://localhost:5005/tutorials/${formData._id}`,
+        `https://tutor-booking-server-olive.vercel.app/tutorials/${formData._id}`,
         formData
       );
       console.log("Updated tutorial:", response);

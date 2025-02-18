@@ -23,12 +23,25 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       // Add your routes here
-      { path: "/", element: <Home /> },
+      {
+        path: "/",
+        element: <Home />,
+        loader: async () => {
+          const res = await fetch(
+            "https://tutor-booking-server-olive.vercel.app/tutorials"
+          );
+          const data = await res.json();
+          // console.log(data);
+          return data;
+        },
+      },
       {
         path: "/find-tutors",
         element: <FindAllTutors />,
         loader: async () => {
-          const res = await fetch("http://localhost:5005/tutorials");
+          const res = await fetch(
+            "https://tutor-booking-server-olive.vercel.app/tutorials"
+          );
           const data = await res.json();
           // console.log(data);
           return data;
@@ -44,7 +57,7 @@ const router = createBrowserRouter([
         loader: async ({ params }) => {
           console.log(params);
           const res = await fetch(
-            `http://localhost:5005/tutorials/${params.language}`
+            `https://tutor-booking-server-olive.vercel.app/tutorials/${params.language}`
           );
           const data = await res.json();
           // console.log(data);
@@ -85,7 +98,7 @@ const router = createBrowserRouter([
         // loader: async ({ params }) => {
         //   // console.log(params);
         //   const res = await fetch(
-        //     `http://localhost:5005/myTutorials/${params.myEmail}`
+        //     `https://tutor-booking-server-olive.vercel.app/myTutorials/${params.myEmail}`
         //   );
         //   const data = await res.json();
         //   console.log(data);
@@ -103,7 +116,7 @@ const router = createBrowserRouter([
         loader: async ({ params }) => {
           // console.log(params);
           const res = await fetch(
-            `http://localhost:5005/booked-tutors/${params.myEmail}`
+            `https://tutor-booking-server-olive.vercel.app/booked-tutors/${params.myEmail}`
           );
           const data = await res.json();
           return data;

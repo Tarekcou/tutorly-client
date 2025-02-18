@@ -4,15 +4,15 @@ import { Link } from "react-router-dom";
 
 const TutorCategories = () => {
   const categories = [
-    { name: "English tutors", count: "27,882 teachers", icon: "🕰️" },
-    { name: "Spanish tutors", count: "8,851 teachers", icon: "⛪" },
-    { name: "French tutors", count: "3,377 teachers", icon: "🗼" },
-    { name: "German tutors", count: "1,417 teachers", icon: "🏛️" },
-    { name: "Italian tutors", count: "2,282 teachers", icon: "🏯" },
-    { name: "Chinese tutors", count: "4,870 teachers", icon: "🏰" },
-    { name: "Arabic tutors", count: "3,335 teachers", icon: "🕌" },
-    { name: "Japanese tutors", count: "2,455 teachers", icon: "⛩️" },
-    { name: "Portuguese tutors", count: "1,356 teachers", icon: "🌉" },
+    { name: "English tutors", count: "82 teachers", icon: "🕰️" },
+    { name: "Spanish tutors", count: "51 teachers", icon: "⛪" },
+    { name: "French tutors", count: "77 teachers", icon: "🗼" },
+    { name: "German tutors", count: "17 teachers", icon: "🏛️" },
+    { name: "Italian tutors", count: "22 teachers", icon: "🏯" },
+    { name: "Chinese tutors", count: "40 teachers", icon: "🏰" },
+    { name: "Arabic tutors", count: "35 teachers", icon: "🕌" },
+    { name: "Japanese tutors", count: "25 teachers", icon: "⛩️" },
+    { name: "Portuguese tutors", count: "16 teachers", icon: "🌉" },
   ];
 
   return (

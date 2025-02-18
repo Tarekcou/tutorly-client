@@ -2,7 +2,7 @@ import React from "react";
 
 const ContactPage = () => {
   return (
-    <div className="flex flex-col mx-auto w-11/12 h-screen">
+    <div className="flex flex-col mx-auto mt-28 mb-72 md:mb-16 w-11/12 h-screen">
       {/* Top Section */}
       <div className="flex md:flex-row flex-col flex-grow">
         {/* Left: Contact Form */}

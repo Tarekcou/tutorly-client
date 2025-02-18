@@ -124,7 +124,7 @@ const AuthProvider = ({ children }) => {
         //     const currentUser = { email: user.email };
         //     console.log(currentUser);
         //     axios
-        //       .post("http://localhost:5005/jwt", currentUser, {
+        //       .post("https://tutor-booking-server-olive.vercel.app/jwt", currentUser, {
         //         withCredential: true,
         //       })
         //       .then((res) => {
@@ -134,7 +134,7 @@ const AuthProvider = ({ children }) => {
         //   } else {
         //     axios
         //       .post(
-        //         "http://localhost:5005/logout",
+        //         "https://tutor-booking-server-olive.vercel.app/logout",
         //         {},
         //         {
         //           withCredential: true,
@@ -151,6 +151,7 @@ const AuthProvider = ({ children }) => {
         // }
         setLoading(false);
       }
+      setLoading(false);
     });
     return () => unsubscribe(); // Unsubscribe on unmount to avoid memory
   }, []);

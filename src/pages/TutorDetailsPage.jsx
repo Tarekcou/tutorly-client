@@ -1,12 +1,13 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
+import Swal from "sweetalert2";
 
 const TutorDetailsPage = () => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
-  const getTutor = location.state?.tutor; // Destructure the passed tutor object
+  const getTutor = location.state?.tutor || location.state?.tutors; // Destructure the passed tutor object
   console.log(getTutor, location);
   const [tutor, setTutors] = useState(getTutor);
   // console.log(tutor);
@@ -27,9 +28,21 @@ const TutorDetailsPage = () => {
       // Assuming user ID is stored in a global state
     };
     axios
-      .post("http://localhost:5005/add-booked-tutorials", bookedTutor)
-      .then((res) => console.log(res));
+      .post(
+        "https://tutor-booking-server-olive.vercel.app/add-booked-tutorials",
+        bookedTutor
+      )
+      .then((res) => {
+        console.log(res);
+        Swal.fire({
+          title: "One Tutorial Added !",
+          text: "Congratulation one tutorial added!",
+          icon: "success",
+        });
+        navigate(`/booked-tutors/${user.email}`);
+      });
   };
+  // console.log(tutor);
 
   return (
     <div className="bg-white shadow-md mx-auto mt-28 p-6 rounded-lg max-w-4xl">
@@ -55,7 +68,7 @@ const TutorDetailsPage = () => {
           </p>
           <div className="flex sm:flex-row flex-col sm:items-center sm:space-x-4 mt-4">
             <p className="text-gray-500 text-sm">
-              🌟 {tutor.rating || 0} reviews
+              🌟 {tutor.review || 0} reviews
             </p>
             <p className="text-gray-500 text-sm">
               📚 {tutor.lessons || 0} lessons
@@ -84,9 +97,12 @@ const TutorDetailsPage = () => {
         >
           Book This Lesson
         </button>
-        <button className="border-gray-300 hover:bg-gray-100 px-6 py-2 border rounded-lg text-gray-600">
+        <Link
+          to="/contact"
+          className="border-gray-300 hover:bg-gray-100 px-6 py-2 border rounded-lg text-gray-600"
+        >
           Send message
-        </button>
+        </Link>
       </div>
 
       {/* Super Popular Badge */}

@@ -89,7 +89,7 @@ const AddTutorials = () => {
     // console.log(dataToSubmit);
     try {
       const response = await axios.post(
-        "http://localhost:5005/add-tutorials",
+        "https://tutor-booking-server-olive.vercel.app/add-tutorials",
         dataToSubmit
       );
       // console.log(response);
@@ -119,7 +119,7 @@ const AddTutorials = () => {
 
   return (
     <div className="flex justify-center items-center bg-gradient-to-br from-slate-100 to-slate-200 mx-auto mt-28 py-10 min-h-screen">
-      <div className="bg-white shadow-lg p-8 rounded-lg w-9/12 md:w-7/12">
+      <div className="bg-white shadow-lg p-8 rounded-lg w-11/12 md:w-7/12">
         <h1 className="mb-6 font-bold text-3xl text-center text-gray-800">
           Add Your Tutorial
         </h1>

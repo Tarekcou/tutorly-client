@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../provider/AuthProvider";
 import { useNavigate } from "react-router-dom";
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5005",
+  baseURL: "https://tutor-booking-server-olive.vercel.app",
   withCredentials: true,
 });
 const useAxiosSecure = () => {
