@@ -1,19 +1,22 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
+import { FaCross } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { MdOutlineDeleteForever } from "react-icons/md";
+
 const MyBookedtutorsCard = ({ tutor, user }) => {
   // const { user } = useContext(AuthContext);
   // const location = useLocation();
   // const gettutors = location.state?.tutors; // Destructure the passed tutors object
-  console.log(tutor);
+  // console.log(tutor);
   const [tutors, setTutors] = useState(tutor);
   // const [updateReview, setUpdateReview] = useState(tutors?.review);
   const handleReview = async () => {
-    console.log("booke tutors card review");
-    console.log(tutors);
+    // console.log("booke tutors card review");
+    // console.log(tutors);
     // setUpdateReview(232);
 
     const reviewId = { reviewId: tutors._id };
@@ -31,7 +34,7 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
       ...prevtutorss,
       review: tutors.review + 1,
     }));
-    console.log(response);
+    // console.log(response);
     // Update the UI after the review count is updated
     if (response.status === 200) {
       setTutors((prevtutorss) => ({
@@ -50,11 +53,37 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
     //   console.log(error.response);
     // }
   };
-  console.log(tutors._id);
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await axios
+          .delete(
+            `https://tutor-booking-server-olive.vercel.app/remove-booked-tutorials/${id}`
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+            }
+          });
+      }
+    });
+  };
   return (
     <div>
-      <div className="relative flex md:flex-row flex-col gap-5 h-auto min-h-44 group">
-        <div className="flex md:flex-row flex-col items-center gap-3 bg-white shadow-lg py-5 p-3 rounded-lg hover:ring-2 md:w-9/12 group">
+      <div className="group relative flex md:flex-row flex-col gap-5 h-auto min-h-44">
+        <div className="group relative flex md:flex-row flex-col items-center gap-5 shadow-lg p-3 py-5 rounded-lg hover:ring-2 md:w-9/12">
           <div className="flex md:flex-row flex-col items-center gap-3 w-8/12">
             <img
               src={tutors?.image}
@@ -64,7 +93,7 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
             <div className="">
               <h3 className="font-bold text-xl">{user?.displayName}</h3>
               <h3 className="text-base">{user?.language}</h3>
-              <p className="flex items-center gap-1 text-base text-gray-600">
+              <p className="flex items-center gap-1 text-gray-600 text-base">
                 <FaLocationDot />
                 {tutors.country}
               </p>
@@ -94,22 +123,35 @@ const MyBookedtutorsCard = ({ tutor, user }) => {
             >
               Add Review
             </button>
-            <button className="text-gray-800 btn btn-outline btn-sm">
+            <Link
+              to={"/contact"}
+              className="btn-outline text-gray-800 btn btn-sm"
+            >
               Send message
+            </Link>
+          </div>
+
+          {/* Delete */}
+          <div
+            onClick={() => handleDelete(tutors._id)}
+            className="top-3 right-3 absolute text-red-600 text-3xl"
+          >
+            <button>
+              <MdOutlineDeleteForever />
             </button>
           </div>
         </div>
-        <div className="group-hover:flex md:top-0 md:right-0 md:absolute justify-center items-center hidden bg-white shadow-lg mx-auto w-10/12 md:w-3/12 h-full card">
+        <div className="group-hover:flex hidden top-0 -right-4 absolute justify-center items-center bg-white shadow-lg w-full md:w-3/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"
-              src={tutors.image}
+              src={tutor.image}
               alt=""
             />
             <Link
               to={"/tutor/details"}
-              state={{ tutors }}
-              className="w-full btn btn-outline btn-sm"
+              state={{ tutor }}
+              className="btn-outline w-full btn btn-sm"
             >
               View Details
             </Link>

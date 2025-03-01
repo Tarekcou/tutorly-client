@@ -21,7 +21,7 @@ const Stats = () => {
     // console.log(review);
   }, []);
   return (
-    <div className="mx-auto py-10 w-11/12">
+    <div className="mx-auto py-10 w-11/12 md:w-10/12">
       <div className="shadow w-full text-center lg:stats-horizontal stats stats-vertical">
         <div className="stat">
           <div className="text-2xl md:stat-value">{uniqueTutors.length}</div>

@@ -66,7 +66,7 @@ const Navbar = () => {
 
           <button
             onClick={handleLogOut}
-            className="my-5 rounded-xl font-medium text-sm text-white-700 hover:text-blue-600 btn btn-sm btn-warning"
+            className="my-5 rounded-xl font-medium text-white-700 hover:text-blue-600 text-sm btn btn-sm btn-warning"
           >
             LogOut
           </button>
@@ -80,7 +80,7 @@ const Navbar = () => {
           </div>
           <NavLink
             to="/login"
-            className="mx-3 rounded-md font-medium text-sm hover:text-blue-600"
+            className="mx-3 rounded-md font-medium hover:text-blue-600 text-sm"
           >
             <button className="py-2 btn btn-sm btn-success">Login</button>
           </NavLink>
@@ -90,10 +90,10 @@ const Navbar = () => {
   );
   const navMenu = (
     <div className="flex lg:flex-row flex-col justify-center gap-2 text-white">
-      <NavLink to="/" className="bg-white btn btn-outline btn-sm">
+      <NavLink to="/" className="bg-white btn-outline btn btn-sm">
         Home
       </NavLink>
-      <NavLink to="/find-tutors" className="bg-white btn btn-outline btn-sm">
+      <NavLink to="/find-tutors" className="bg-white btn-outline btn btn-sm">
         Find Tutors
       </NavLink>
 
@@ -101,19 +101,19 @@ const Navbar = () => {
         <div className="flex lg:flex-row flex-col gap-2">
           <NavLink
             to="/addTutorials"
-            className="bg-white btn btn-outline btn-sm"
+            className="bg-white btn-outline btn btn-sm"
           >
             Add Tutorials
           </NavLink>
           <NavLink
             to={`/myTutorials/${user.email}`}
-            className="bg-white btn btn-outline btn-sm"
+            className="bg-white btn-outline btn btn-sm"
           >
             My Tutorials
           </NavLink>
           <NavLink
             to={`/booked-tutors/${user.email}`}
-            className="bg-white btn btn-outline btn-sm"
+            className="bg-white btn-outline btn btn-sm"
           >
             My Booked Tutors
           </NavLink>
@@ -121,17 +121,17 @@ const Navbar = () => {
       ) : (
         ""
       )}
-      <NavLink to={`/contact`} className="bg-white btn btn-outline btn-sm">
+      <NavLink to={`/contact`} className="bg-white btn-outline btn btn-sm">
         Contact
       </NavLink>
     </div>
   );
   return (
     <>
-      <div className="flex justify-between items-center bg-none mx-auto my-2 md:w-11/12 absolue">
+      <div className="flex justify-between items-center bg-none mx-auto my-2 w-11/12 md:w-10/12 absolue">
         {/* left side */}
         <div className="flex justify-center items-center">
-          <div className="block lg:!hidden dropdown">
+          <div className="lg:!hidden block dropdown">
             <div
               tabIndex={0}
               role="button"
@@ -162,24 +162,24 @@ const Navbar = () => {
           </div>
           <Link
             to={"/"}
-            className="flex items-center gap-1 font-bold text-2xl text-orange-500"
+            className="flex items-center gap-1 font-bold text-orange-500 text-2xl"
           >
             <img className="rounded-full w-6 h-6" src={logo} /> Tutorly
           </Link>
         </div>
         {/* middle area */}
 
-        <div className="lg:!block !hidden">
+        <div className="!hidden lg:!block">
           <ul className="w-full">{navMenu}</ul>
         </div>
         {/* right side */}
         <div className="flex justify-center items-center gap-2">
-          <div className="md:!block hidden">{signInSignOutToggle}</div>
+          <div className="hidden md:!block">{signInSignOutToggle}</div>
           {/* <Link to={"/main/checkOut"} className="relative">
             <p className="-top-2 -right-2 absolute font-bold text-yellow-500">
               {cart.length}{" "}
             </p>
-            <FaCartPlus className="text-3xl text-green-500" />
+            <FaCartPlus className="text-green-500 text-3xl" />
           </Link> */}
           <div className="form-control">
             <label className="cursor-pointer label">

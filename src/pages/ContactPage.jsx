@@ -2,7 +2,7 @@ import React from "react";
 
 const ContactPage = () => {
   return (
-    <div className="flex flex-col mx-auto mt-28 mb-72 md:mb-16 w-11/12 h-screen">
+    <div className="flex flex-col mx-auto mt-28 mb-72 md:mb-16 w-11/12 md:w-10/12 h-screen">
       {/* Top Section */}
       <div className="flex md:flex-row flex-col flex-grow">
         {/* Left: Contact Form */}
@@ -16,7 +16,7 @@ const ContactPage = () => {
               <input
                 type="text"
                 placeholder="Enter your name"
-                className="block border-gray-300 focus:border-indigo-500 shadow-sm mt-1 px-4 py-2 border rounded-lg focus:ring-indigo-500 w-full"
+                className="block shadow-sm mt-1 px-4 py-2 border border-gray-300 focus:border-indigo-500 rounded-lg focus:ring-indigo-500 w-full"
               />
             </div>
             <div>
@@ -26,7 +26,7 @@ const ContactPage = () => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="block border-gray-300 focus:border-indigo-500 shadow-sm mt-1 px-4 py-2 border rounded-lg focus:ring-indigo-500 w-full"
+                className="block shadow-sm mt-1 px-4 py-2 border border-gray-300 focus:border-indigo-500 rounded-lg focus:ring-indigo-500 w-full"
               />
             </div>
             <div>
@@ -36,7 +36,7 @@ const ContactPage = () => {
               <textarea
                 rows="4"
                 placeholder="Enter your message"
-                className="block border-gray-300 focus:border-indigo-500 shadow-sm mt-1 px-4 py-2 border rounded-lg focus:ring-indigo-500 w-full"
+                className="block shadow-sm mt-1 px-4 py-2 border border-gray-300 focus:border-indigo-500 rounded-lg focus:ring-indigo-500 w-full"
               ></textarea>
             </div>
             <button

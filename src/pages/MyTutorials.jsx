@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import Loading from "../components/Loading";
 
 const MyTutorials = () => {
   // const tutorials = useLoaderData();
@@ -12,6 +13,13 @@ const MyTutorials = () => {
   const [tutorials, setTutorials] = useState([]);
   const params = useParams();
   const axiosSecure = useAxiosSecure();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    // Simulate a network request (remove this if useLoaderData() already handles loading)
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
   useEffect(() => {
     // Fetch data from the server
     axios
@@ -58,73 +66,82 @@ const MyTutorials = () => {
   };
   if (tutorials.length == 0) {
     return (
-      <div className="mt-44 text-center text-gray-700">
+      <div className="mt-44 min-h-screen text-gray-700 text-center">
         You have not created any tutorials yet.
       </div>
     );
   }
   return (
-    <div className="mt-32 p-8">
-      <h1 className="mb-6 font-bold text-2xl">My Tutorials</h1>
-      <table className="border-collapse border-gray-300 border w-full table-auto">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border-gray-300 px-4 py-2 border">Name</th>
-            <th className="border-gray-300 px-4 py-2 border">Image</th>
-            <th className="border-gray-300 px-4 py-2 border">Language</th>
-            <th className="border-gray-300 px-4 py-2 border">Price</th>
-            <th className="border-gray-300 px-4 py-2 border">Description</th>
-            <th className="border-gray-300 px-4 py-2 border">Review</th>
-            <th className="border-gray-300 px-4 py-2 border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tutorials.map((tutorial) => (
-            <tr key={tutorial._id}>
-              <td className="border-gray-300 px-4 py-2 border">
-                {tutorial.name}
-              </td>
-              <td className="border-gray-300 px-4 py-2 border">
-                <img
-                  src={tutorial.image}
-                  alt="Tutorial"
-                  className="w-16 h-16 object-cover"
-                />
-              </td>
-              <td className="border-gray-300 px-4 py-2 border">
-                {tutorial.language}
-              </td>
-              <td className="border-gray-300 px-4 py-2 border">
-                ${tutorial.price}
-              </td>
-              <td className="border-gray-300 px-4 py-2 border">
-                {tutorial.description}
-              </td>
-              <td className="border-gray-300 px-4 py-2 border">
-                {tutorial.review}
-              </td>
-              <td className="flex gap-2 border-gray-300 px-4 py-2 border">
-                <button
-                  className="bg-red-500 px-4 py-2 rounded text-white"
-                  onClick={() => handleDelete(tutorial._id)}
-                >
-                  Delete
-                </button>
-                <Link
-                  to={`/updateTutorials/${tutorial._id}`}
-                  state={{ tutorial }}
-                  className="bg-blue-500 px-4 py-2 rounded text-white"
-                >
-                  Update
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <>
+      {loading ? (
+        // Show Loading State
+        <div className="-mt-28 font-semibold text-blue-500 text-lg text-center">
+          <Loading />
+        </div>
+      ) : (
+        <div className="mt-32 p-8">
+          <h1 className="mb-6 font-bold text-2xl">My Tutorials</h1>
+          <table className="border border-gray-300 w-full border-collapse table-auto">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 border border-gray-300">Name</th>
+                <th className="px-4 py-2 border border-gray-300">Image</th>
+                <th className="px-4 py-2 border border-gray-300">Language</th>
+                <th className="px-4 py-2 border border-gray-300">Price</th>
+                <th className="px-4 py-2 border border-gray-300">
+                  Description
+                </th>
+                <th className="px-4 py-2 border border-gray-300">Review</th>
+                <th className="px-4 py-2 border border-gray-300">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tutorials.map((tutorial) => (
+                <tr key={tutorial._id}>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {tutorial.name}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    <img
+                      src={tutorial.image}
+                      alt="Tutorial"
+                      className="w-16 h-16 object-cover"
+                    />
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {tutorial.language}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    ${tutorial.price}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {tutorial.description}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {tutorial.review}
+                  </td>
+                  <td className="flex gap-2 px-4 py-2 border border-gray-300">
+                    <button
+                      className="bg-red-500 px-4 py-2 rounded text-white"
+                      onClick={() => handleDelete(tutorial._id)}
+                    >
+                      Delete
+                    </button>
+                    <Link
+                      to={`/updateTutorials/${tutorial._id}`}
+                      state={{ tutorial }}
+                      className="bg-blue-500 px-4 py-2 rounded text-white"
+                    >
+                      Update
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-      {/* Update Modal */}
-      {/* {showModal && selectedTutorial && (
+          {/* Update Modal */}
+          {/* {showModal && selectedTutorial && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <div className="bg-white shadow-lg p-6 rounded w-1/2">
             <h2 className="mb-4 font-bold text-xl">Update Tutorial</h2>
@@ -149,7 +166,7 @@ const MyTutorials = () => {
                   type="text"
                   value={selectedTutorial.name}
                   readOnly
-                  className="border-gray-300 px-4 py-2 border rounded w-full"
+                  className="px-4 py-2 border border-gray-300 rounded w-full"
                 />
               </div>
               <div className="mb-4">
@@ -158,7 +175,7 @@ const MyTutorials = () => {
                   type="email"
                   value={selectedTutorial.email}
                   readOnly
-                  className="border-gray-300 px-4 py-2 border rounded w-full"
+                  className="px-4 py-2 border border-gray-300 rounded w-full"
                 />
               </div>
               <div className="mb-4">
@@ -172,7 +189,7 @@ const MyTutorials = () => {
                       image: e.target.value,
                     })
                   }
-                  className="border-gray-300 px-4 py-2 border rounded w-full"
+                  className="px-4 py-2 border border-gray-300 rounded w-full"
                 />
               </div>
               <div className="mb-4">
@@ -186,7 +203,7 @@ const MyTutorials = () => {
                       language: e.target.value,
                     })
                   }
-                  className="border-gray-300 px-4 py-2 border rounded w-full"
+                  className="px-4 py-2 border border-gray-300 rounded w-full"
                 />
               </div>
               <div className="mb-4">
@@ -200,7 +217,7 @@ const MyTutorials = () => {
                       price: e.target.value,
                     })
                   }
-                  className="border-gray-300 px-4 py-2 border rounded w-full"
+                  className="px-4 py-2 border border-gray-300 rounded w-full"
                 />
               </div>
               <div className="mb-4">
@@ -213,7 +230,7 @@ const MyTutorials = () => {
                       description: e.target.value,
                     })
                   }
-                  className="border-gray-300 px-4 py-2 border rounded w-full"
+                  className="px-4 py-2 border border-gray-300 rounded w-full"
                 />
               </div>
               <div className="mb-4">
@@ -222,7 +239,7 @@ const MyTutorials = () => {
                   type="text"
                   value={selectedTutorial.review}
                   readOnly
-                  className="border-gray-300 px-4 py-2 border rounded w-full"
+                  className="px-4 py-2 border border-gray-300 rounded w-full"
                 />
               </div>
               <button
@@ -242,7 +259,9 @@ const MyTutorials = () => {
           </div>
         </div>
       )} */}
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

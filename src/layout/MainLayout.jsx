@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
+import Loading from "../components/Loading";
+import { AuthContext } from "../provider/AuthProvider";
 
 const MainLayout = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,6 +18,20 @@ const MainLayout = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const { isLoading, setLoading } = useContext(AuthContext);
+  console.log(isLoading);
+  useEffect(() => {
+    // fetch data here
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+    return () => {
+      // cleanup function
+    };
+  }, []);
+  if (isLoading) return <Loading />;
   return (
     <div className="relative">
       <div

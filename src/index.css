@@ -4,7 +4,10 @@
 
 a.active {
   background-color: rgb(47, 134, 211);
+  color: white;
+  border: none;
 }
+
 .swiper-button-prev {
   color: red;
 }
