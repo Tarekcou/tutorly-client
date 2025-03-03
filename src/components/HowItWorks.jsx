@@ -54,7 +54,7 @@ const HowItWorks = () => {
 
   return (
     <div>
-      <div className="relative mx-auto px-4 py-8 w-11/12 md:w-10/12">
+      <div className="relative mx-auto px-4 py-8 w-full md:w-10/12">
         <h2 className="mb-8 font-bold text-3xl md:text-5xl text-center">
           How It Works
         </h2>

@@ -64,17 +64,19 @@ const TutorCard = ({ tutor, user }) => {
   };
 
   return (
-    <div>
+    <div className="my-5">
       <div
         data-aos="fade-right"
         className="group relative flex md:flex-row flex-col gap-3 h-auto min-h-44"
       >
-        <div
+        <Link
+          to={"/tutor/details"}
+          state={{ tutor }}
           className={`group relative flex md:flex-row flex-col items-center gap-3  shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-9/12 ${
             user?.email === tutor?.email ? "bg-green-100" : "bg-white"
           }`}
         >
-          <div className="flex md:flex-row flex-col items-center gap-3 w-8/12">
+          <div className="flex md:flex-row flex-col items-center gap-3 md:w-8/12">
             <img
               src={tutor?.imageUrl}
               alt={tutor?.name}
@@ -94,7 +96,7 @@ const TutorCard = ({ tutor, user }) => {
           </div>
           <div className="flex flex-row md:flex-col justify-center items-center gap-3 md:w-4/12 text-center">
             <div>
-              <div className="flex md:flex-row flex-col justify-center items-center gap-3 text-center">
+              <div className="flex md:flex-row justify-center items-center gap-3 text-center">
                 <span className="flex items-center gap-1 font-bold text-yellow-500">
                   {tutor.rating}
                   <FaStar />
@@ -107,7 +109,8 @@ const TutorCard = ({ tutor, user }) => {
                 ${tutor.hourlyRate} / 50-min lesson
               </p>
             </div>
-            <div>
+
+            <div className="space-y-2">
               <button
                 onClick={handleBooked}
                 className="bg-pink-500 hover:bg-pink-600 mt-2 rounded-lg text-white btn btn-sm"
@@ -133,9 +136,9 @@ const TutorCard = ({ tutor, user }) => {
               </button>
             </div>
           )}
-        </div>
+        </Link>
 
-        <div className="group-hover:flex hidden top-0 -right-4 absolute justify-center items-center bg-white shadow-lg w-full md:w-3/12 h-full card">
+        <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-white shadow-lg w-full md:w-3/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"

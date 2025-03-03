@@ -103,9 +103,9 @@ const FindAllTutors = () => {
     );
   });
 
-  console.log(filteredTutors);
+  // console.log(filteredTutors);
   return (
-    <div className="mx-auto mt-28 p-8 w-11/12 md:w-10/12 min-h-screen">
+    <div className="mx-auto mt-28 md:p-8 w-11/12 md:w-10/12 min-h-screen">
       {loading ? (
         <div className="-mt-28 font-semibold text-blue-500 text-lg text-center">
           <Loading />

@@ -185,7 +185,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content (Scrollable) */}
-      <div className="flex-1 bg-gray-100 md:ml-64 p-8 h-screen overflow-y-auto">
+      <div className="flex-1 bg-gray-100 md:ml-64 md:p-8 h-screen overflow-y-auto">
         {activePage === "addTutorial" && <AddTutorials />}
         {activePage === "myTutorials" && <MyTutorials />}
         {activePage === "profile" && <Profile />}
