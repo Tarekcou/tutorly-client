@@ -29,10 +29,10 @@ const GetStartedPage = () => {
     "Danish",
   ];
   const handleLanguageChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setLanguage(e.target.value);
   };
-  console.log(location);
+  // console.log(location);
   return (
     <div
       className="flex justify-center items-center gap-10 space-y-5 mx-auto min-h-screen"

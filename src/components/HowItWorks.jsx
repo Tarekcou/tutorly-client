@@ -58,7 +58,10 @@ const HowItWorks = () => {
         <h2 className="mb-8 font-bold text-3xl md:text-5xl text-center">
           How It Works
         </h2>
-        <div className="gap-6 grid grid-cols-1 md:grid-cols-3">
+        <div
+          data-aos="ease-in-out"
+          className="gap-6 grid grid-cols-1 md:grid-cols-3"
+        >
           {steps.map((step) => (
             <div
               key={step.id}
@@ -75,6 +78,7 @@ const HowItWorks = () => {
                 <div className="space-y-4">
                   {step.subItems.map((item, index) => (
                     <div
+                      data-aos="fade-up"
                       key={index}
                       className="flex items-center p-3 border rounded-lg"
                     >
@@ -109,8 +113,8 @@ const HowItWorks = () => {
         </div>
       </div>
       {/* Full-Width Section */}
-      <div className="bg-pink-300 mt-10 py-20 w-screen text-center">
-        <h1 className="font-bold text-black text-5xl md:text-6xl">
+      <div className="bg-blue-400 mt-10 py-20 w-screen text-center">
+        <h1 className="font-bold text-white text-5xl md:text-6xl">
           Lessons you’ll love. Guaranteed.
         </h1>
         <p className="mt-4 text-black/70 text-xl">

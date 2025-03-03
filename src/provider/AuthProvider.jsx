@@ -118,6 +118,7 @@ const AuthProvider = ({ children }) => {
       setLoading(true);
       if (user) {
         setUser(user);
+        // console.log("user", user);
         const uid = user.uid;
         // (user)
         //   if (user?.email) {

@@ -7,6 +7,14 @@ a.active {
   color: white;
   border: none;
 }
+a.active:hover {
+  background-color: rgb(8, 88, 158);
+  border: none;
+}
+a:hover {
+  background-color: rgb(205, 205, 205);
+  border: none;
+}
 
 .swiper-button-prev {
   color: red;

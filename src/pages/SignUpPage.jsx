@@ -6,7 +6,7 @@ import { FaEyeSlash, FaGoogle } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye } from "react-icons/fa";
-import MainLayout from "../layout/MainLayout";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -14,6 +14,7 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [photoUrl, setPhotoUrl] = useState("");
+  const axiosPublic = useAxiosPublic();
   const {
     isLoading,
     setLoading,
@@ -62,13 +63,22 @@ const SignUpPage = () => {
         // Signed up
         const user = userCredential.user;
 
-        user;
         setLoading(false);
         setUser(user);
 
-        navigate("/");
-        name, email, photoUrl, password;
-        updateUserProfile(name, photoUrl);
+        updateUserProfile(name, photoUrl).then(() => {
+          const userInfo = {
+            name,
+            email,
+            isAdmin: false,
+          };
+          // console.log(userInfo);
+          axiosPublic.post("/user", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              navigate("/");
+            }
+          });
+        });
 
         setimageKey((prev) => prev + 1);
 
@@ -89,17 +99,26 @@ const SignUpPage = () => {
 
   const handleGoogleLogin = () => {
     toast("Register is processing..");
-
     googleLogin()
       .then((result) => {
+        console.log(result);
+        const userInfo = {
+          email: result.user?.email,
+          name: result.user?.displayName,
+          isAdmin: false,
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          // console.log(res);
+          if (location?.state) navigate(location?.state);
+          else {
+            navigate("/");
+          }
+        });
+
         const user = result.user;
         setUser(user);
-        if (location?.state) navigate(location?.state);
-        else {
-          navigate("/");
-        }
+
         setLoading(false);
-        // ...
       })
       .catch((error) => {
         // Handle Errors here.
@@ -115,7 +134,7 @@ const SignUpPage = () => {
       ) : (
         <>
           <div className="bg-white shadow-lg p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12">
-            <h2 className="font-bold text-3xl text-center text-green-700">
+            <h2 className="font-bold text-green-700 text-3xl text-center">
               Register
             </h2>
             <form onSubmit={handleRegister} className="mt-6">
@@ -129,7 +148,7 @@ const SignUpPage = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  className="mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-500 w-full focus:outline-none"
+                  className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
                 />
                 {errMessage.name && (
                   <label className="text-red-600 text-xs">
@@ -147,7 +166,7 @@ const SignUpPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-500 w-full focus:outline-none"
+                  className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
                 />
               </div>
               <div className="mb-4">
@@ -161,7 +180,7 @@ const SignUpPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="relative mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-500 w-full focus:outline-none"
+                    className="relative mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
                   />
                   <button
                     type="button"
@@ -195,12 +214,12 @@ const SignUpPage = () => {
                   value={photoUrl}
                   onChange={(e) => setPhotoUrl(e.target.value)}
                   required
-                  className="mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-500 w-full focus:outline-none"
+                  className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
                 />
               </div>
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg w-full text-white focus:outline-none"
+                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg focus:outline-none w-full text-white"
               >
                 Sign up
               </button>
@@ -214,12 +233,12 @@ const SignUpPage = () => {
             <button
               onClick={handleGoogleLogin}
               type="submit"
-              className="flex justify-center items-center gap-2 bg-green-600 hover:bg-green-800 my-2 px-4 py-2 rounded-lg w-full text-white cursor-pointer focus:outline-none"
+              className="flex justify-center items-center gap-2 bg-green-600 hover:bg-green-800 my-2 px-4 py-2 rounded-lg focus:outline-none w-full text-white cursor-pointer"
             >
               <FaGoogle className="" /> Continue with Google
             </button>
 
-            <p className="mt-4 text-center text-gray-600 text-sm">
+            <p className="mt-4 text-gray-600 text-sm text-center">
               Already have an account?{" "}
               <a href="/login" className="text-blue-600 hover:underline">
                 Login here
@@ -227,7 +246,7 @@ const SignUpPage = () => {
             </p>
 
             {errMessage.submitError && (
-              <h1 className="text-center text-red-500">
+              <h1 className="text-red-500 text-center">
                 {errMessage.submitError}
               </h1>
             )}

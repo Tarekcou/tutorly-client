@@ -7,25 +7,38 @@ import BecomeTutor from "../components/BecomeTutor";
 import { AuthContext } from "../provider/AuthProvider";
 import Loading from "../components/Loading";
 import Reviews from "../components/Reviews";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate a network request (remove this if useLoaderData() already handles loading)
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
+  const axiosPublic = useAxiosPublic();
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: tutors = [],
+    refetch,
+  } = useQuery({
+    queryKey: ["tutors"],
+    queryFn: async () => {
+      const response = await axiosPublic.get(`/tutors`);
+      return response.data;
+    },
+  });
+
   return (
     <div className="min-h-screen">
-      {loading ? (
-        <Loading />
+      {isLoading ? (
+        <div className="-mt-28 min-h-screen font-semibold text-blue-500 text-lg text-center">
+          <Loading />
+        </div>
       ) : (
         <>
-          <Hero />
-          <Stats />
+          <Hero data-aos="fade-up" />
+          <Stats tutors={tutors} />
           <TutorCategories />
           <HowItWorks />
           <Reviews />

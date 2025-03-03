@@ -1,7 +1,8 @@
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+// You can also use <link> for styles
+// ..
 const TutorCategories = () => {
   const categories = [
     { name: "English tutors", count: "82 teachers", icon: "🕰️" },
@@ -17,10 +18,13 @@ const TutorCategories = () => {
 
   return (
     <div className="space-y-5 mx-auto py-8 w-11/12 md:w-10/12">
-      <h1 className="mb-5 font-bold text-3xl md:text-5xl text-center">
+      <h1 className="mb-10 font-bold text-3xl md:text-5xl text-center">
         What do you want to learn
       </h1>
-      <div className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        data-aos="fade-up"
+        className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+      >
         {categories.map((category, index) => (
           <Link
             to={"/find-tutors/get-started"}

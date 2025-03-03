@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../provider/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 const UpdateTutorials = () => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
@@ -10,6 +11,7 @@ const UpdateTutorials = () => {
   // console.log(location.state.tutorial);
   // State to handle form data
   const [rating, setRating] = useState(0);
+  const axiosPublic = useAxiosPublic();
 
   const [formData, setFormData] = useState(
     location.state.tutorial || {
@@ -82,8 +84,8 @@ const UpdateTutorials = () => {
     e.preventDefault();
     console.log(formData._id);
     try {
-      const response = await axios.put(
-        `https://tutor-booking-server-olive.vercel.app/tutorials/${formData._id}`,
+      const response = await axiosPublic.put(
+        `/tutorials/${formData._id}`,
         formData
       );
       console.log("Updated tutorial:", response);
@@ -114,7 +116,7 @@ const UpdateTutorials = () => {
   return (
     <div className="flex justify-center items-center bg-gradient-to-br from-slate-100 to-slate-200 mx-auto mt-28 py-10 min-h-screen">
       <div className="bg-white shadow-lg p-8 rounded-lg w-9/12 md:w-7/12">
-        <h1 className="mb-6 font-bold text-3xl text-center text-gray-800">
+        <h1 className="mb-6 font-bold text-gray-800 text-3xl text-center">
           Update Your Tutorial
         </h1>
         <form onSubmit={handleUpdate}>
@@ -125,7 +127,7 @@ const UpdateTutorials = () => {
               type="text"
               value={user?.displayName}
               readOnly
-              className="border-gray-300 bg-gray-100 p-3 border rounded-lg w-full text-gray-600"
+              className="bg-gray-100 p-3 border border-gray-300 rounded-lg w-full text-gray-600"
             />
           </div>
 
@@ -136,7 +138,7 @@ const UpdateTutorials = () => {
               type="email"
               value={user?.email}
               readOnly
-              className="border-gray-300 bg-gray-100 p-3 border rounded-lg w-full text-gray-600"
+              className="bg-gray-100 p-3 border border-gray-300 rounded-lg w-full text-gray-600"
             />
           </div>
 
@@ -151,7 +153,7 @@ const UpdateTutorials = () => {
               value={formData.image}
               onChange={handleChange}
               placeholder="Enter tutorial image URL"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             />
           </div>
@@ -162,7 +164,7 @@ const UpdateTutorials = () => {
               name="country"
               value={formData.country}
               onChange={handleChange}
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             >
               <option value="" disabled>
@@ -206,7 +208,7 @@ const UpdateTutorials = () => {
               name="language"
               value={formData.language}
               onChange={handleChange}
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             >
               <option value="" disabled>
@@ -231,7 +233,7 @@ const UpdateTutorials = () => {
               value={formData.price}
               onChange={handleChange}
               placeholder="Enter price"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             />
           </div>
@@ -246,7 +248,7 @@ const UpdateTutorials = () => {
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter tutorial description"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               rows="4"
               required
             ></textarea>
@@ -261,7 +263,7 @@ const UpdateTutorials = () => {
               value={formData.review}
               onChange={handleChange}
               placeholder="Enter Review"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
               readOnly={location.state ? true : false}
             />

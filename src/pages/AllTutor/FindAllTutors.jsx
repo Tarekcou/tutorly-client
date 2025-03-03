@@ -1,23 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa6";
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 import TutorCard from "./TutorCard";
 import Loading from "../../components/Loading";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const FindAllTutors = () => {
-  const tutors = useLoaderData();
+  const [tutors, setTutors] = useState([]);
   const { user } = useContext(AuthContext);
   const lan = useParams();
-
   const [loading, setLoading] = useState(true);
-
+  const axiosPublic = useAxiosPublic();
   useEffect(() => {
-    // Simulate a network request (remove this if useLoaderData() already handles loading)
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    const fetchTutors = async () => {
+      try {
+        const res = await axiosPublic.get("/tutors");
+
+        const data = await res.data;
+        // console.log(data);
+        setTutors(data);
+      } catch (error) {
+        console.error("Error fetching tutors:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTutors();
   }, []);
 
   const countries = [
@@ -73,30 +84,40 @@ const FindAllTutors = () => {
   const [keyword, setKeyword] = useState("");
 
   const filteredTutors = tutors.filter((tutor) => {
+    const tutorPrice = parseInt(tutor.hourlyRate, 10);
     return (
-      language === "" ||
-      (tutor.language === language &&
-        (country === "" || tutor.country === country) &&
-        parseInt(tutor.price) <= parseInt(maxPrice) &&
-        (keyword === "" ||
-          user.displayName.toLowerCase().includes(keyword.toLowerCase()) ||
-          tutor.country.toLowerCase().includes(keyword.toLowerCase()) ||
-          tutor.language.toLowerCase().includes(keyword.toLowerCase())))
+      (language === "" ||
+        tutor.languages.some(
+          (lang) => lang.toLowerCase() === language.toLowerCase()
+        )) &&
+      (country === "" ||
+        tutor.country?.toLowerCase() === country.toLowerCase()) &&
+      !isNaN(tutorPrice) &&
+      tutorPrice <= parseInt(maxPrice, 10) &&
+      (keyword === "" ||
+        tutor.name.toLowerCase().includes(keyword.toLowerCase()) ||
+        tutor.country?.toLowerCase().includes(keyword.toLowerCase()) ||
+        tutor.languages.some((lang) =>
+          lang.toLowerCase().includes(keyword.toLowerCase())
+        ))
     );
   });
 
+  console.log(filteredTutors);
   return (
     <div className="mx-auto mt-28 p-8 w-11/12 md:w-10/12 min-h-screen">
       {loading ? (
-        // Show Loading State
         <div className="-mt-28 font-semibold text-blue-500 text-lg text-center">
           <Loading />
         </div>
+      ) : tutors.length === 0 ? (
+        <h2 className="mb-4 font-semibold text-xl">No tutors Available</h2>
       ) : (
         <>
           <h1 className="mb-8 font-bold text-3xl">
             Online tutors & teachers for private lessons
           </h1>
+
           {/* Filters Section */}
           <div className="flex md:flex-row flex-col flex-wrap gap-4 mb-8">
             <div className="flex-1">
@@ -106,9 +127,9 @@ const FindAllTutors = () => {
                 onChange={(e) => setLanguage(e.target.value)}
                 className="p-2 border rounded-lg w-full"
               >
-                {languages.map((country, index) => (
-                  <option key={index} value={country}>
-                    {country}
+                {languages.map((lang, index) => (
+                  <option key={index} value={lang}>
+                    {lang}
                   </option>
                 ))}
               </select>
@@ -134,10 +155,10 @@ const FindAllTutors = () => {
                 onChange={(e) => setCountry(e.target.value)}
                 className="p-2 border rounded-lg w-full"
               >
-                <option value="">Select a Language</option>
-                {countries.map((country, index) => (
-                  <option key={index} value={country}>
-                    {country}
+                <option value="">Select a Country</option>
+                {countries.map((c, index) => (
+                  <option key={index} value={c}>
+                    {c}
                   </option>
                 ))}
               </select>

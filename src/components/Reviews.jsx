@@ -62,12 +62,13 @@ const Reviews = () => {
         {reviews.map((review) => (
           <SwiperSlide
             key={review.id}
-            className="flex md:flex-row flex-col items-center gap-6 shadow-lg p-2 border rounded-xl"
+            className="flex md:flex-row flex-col items-center gap-6 shadow-lg p-2 rounded-xl"
           >
             <div className="flex md:flex-row flex-col items-center py-10 rounded-xl">
               {/* Left Side - Large Profile Image */}
               <div className="flex justify-center w-full md:w-1/3">
                 <img
+                  data-aos="fade-right"
                   src={review.image}
                   alt={review.name}
                   className="border-4 w-32 md:w-56 h-44 md:h-60"

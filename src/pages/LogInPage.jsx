@@ -5,6 +5,7 @@ import Loading from "../components/Loading";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa6";
 import MainLayout from "../layout/MainLayout";
 import toast from "react-hot-toast";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const LogInPage = () => {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ const LogInPage = () => {
   const navigate = useNavigate();
   const [err, setErr] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const axiosPublic = useAxiosPublic();
 
   const location = useLocation();
   const togglePasswordVisibility = () => {
@@ -35,7 +37,6 @@ const LogInPage = () => {
         }
         toast.success("Loged in");
         const user = userCredential.user;
-        user;
         setUser(user);
         setLoading(false);
 
@@ -52,18 +53,26 @@ const LogInPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    toast.success("Log in Processing...");
+    toast("Register is processing..");
     googleLogin()
       .then((result) => {
-        if (location?.state) navigate(location?.state);
-        else {
-          navigate("/");
-        }
+        const userInfo = {
+          email: result.user?.email,
+          name: result.user?.displayName,
+          isAdmin: false,
+        };
+        axiosPublic.post("/users", userInfo).then((res) => {
+          if (location?.state) navigate(location?.state);
+          else {
+            // console.log(location);
+            navigate("/");
+          }
+        });
+
         const user = result.user;
         setUser(user);
 
         setLoading(false);
-        // ...
       })
       .catch((error) => {
         // Handle Errors here.
@@ -81,12 +90,12 @@ const LogInPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gray-100 min-h-screen">
+    <div className="flex justify-center items-center mt-10 min-h-screen">
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="bg-white shadow-lg py-16 p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12 h-full">
-          <h2 className="font-bold text-3xl text-center text-green-600">
+        <div className="bg-white shadow-lg p-8 py-16 rounded-lg w-11/12 md:w-8/12 lg:w-6/12 h-full">
+          <h2 className="font-bold text-green-600 text-3xl text-center">
             Login
           </h2>
           <form onSubmit={handleLogin} className="mt-6">
@@ -100,7 +109,7 @@ const LogInPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-500 w-full focus:outline-none"
+                className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
               />
             </div>
 
@@ -115,7 +124,7 @@ const LogInPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-500 w-full focus:outline-none"
+                  className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
                 />
                 <button
                   type="button"
@@ -147,7 +156,7 @@ const LogInPage = () => {
 
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg w-full text-white focus:outline-none"
+              className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg focus:outline-none w-full text-white"
             >
               Login
             </button>
@@ -161,11 +170,11 @@ const LogInPage = () => {
           <button
             onClick={handleGoogleLogin}
             type="submit"
-            className="flex justify-center items-center gap-2 bg-green-600 hover:bg-green-800 my-2 px-4 py-2 rounded-lg w-full text-white cursor-pointer focus:outline-none"
+            className="flex justify-center items-center gap-2 hover:bg-gray-100 my-2 px-4 py-2 rounded-lg btn-outline focus:outline-none w-full text-black hover:text-orange-500 cursor-pointer btn"
           >
-            <FaGoogle className="" /> Continue with Google
+            <FaGoogle className="text-blue-600" /> Continue with Google
           </button>
-          <p className="mt-4 text-center text-gray-600 text-sm">
+          <p className="mt-4 text-gray-600 text-sm text-center">
             Don't have an account?{" "}
             <a href="/signUp" className="text-blue-600 hover:underline">
               Register here
@@ -173,7 +182,7 @@ const LogInPage = () => {
           </p>
 
           {err ? (
-            <h1 className="text-center text-red-500">
+            <h1 className="text-red-500 text-center">
               Can't Login Check Email or Password {err}
             </h1>
           ) : (

@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import { AuthContext } from "../provider/AuthProvider";
+import { AuthContext } from "../../provider/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const AddTutorials = () => {
   const { user } = useContext(AuthContext);
@@ -10,6 +11,7 @@ const AddTutorials = () => {
   // console.log(location.state.tutorial);
   // State to handle form data
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
   const [rating, setRating] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -88,10 +90,7 @@ const AddTutorials = () => {
     };
     // console.log(dataToSubmit);
     try {
-      const response = await axios.post(
-        "https://tutor-booking-server-olive.vercel.app/add-tutorials",
-        dataToSubmit
-      );
+      const response = await axiosPublic.post("/add-tutorials", dataToSubmit);
       // console.log(response);
       if (response.status === 200) {
         // alert("Tutorial added successfully!");
@@ -109,7 +108,7 @@ const AddTutorials = () => {
           text: "Congratulation one tutorial added!",
           icon: "success",
         });
-        navigate(`/myTutorials/${user.email}`);
+        // navigate(`/myTutorials/${user.email}`);
       }
     } catch (error) {
       console.error("Error saving tutorial:", error);
@@ -118,9 +117,9 @@ const AddTutorials = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gradient-to-br from-slate-100 to-slate-200 mx-auto mt-28 py-10 min-h-screen">
-      <div className="bg-white shadow-lg p-8 rounded-lg w-11/12 md:w-7/12">
-        <h1 className="mb-6 font-bold text-3xl text-center text-gray-800">
+    <div className="flex justify-center items-center bg-gradient-to-br from-slate-100 to-slate-200 mx-auto mt-10 py-10 min-h-screen">
+      <div className="bg-white shadow-lg p-8 rounded-lg w-11/12 md:w-10/12">
+        <h1 className="mb-6 font-bold text-gray-800 text-3xl text-center">
           Add Your Tutorial
         </h1>
         <form onSubmit={handleSubmit}>
@@ -131,7 +130,7 @@ const AddTutorials = () => {
               type="text"
               value={user?.displayName}
               readOnly
-              className="border-gray-300 bg-gray-100 p-3 border rounded-lg w-full text-gray-600"
+              className="bg-gray-100 p-3 border border-gray-300 rounded-lg w-full text-gray-600"
             />
           </div>
 
@@ -142,7 +141,7 @@ const AddTutorials = () => {
               type="email"
               value={user?.email}
               readOnly
-              className="border-gray-300 bg-gray-100 p-3 border rounded-lg w-full text-gray-600"
+              className="bg-gray-100 p-3 border border-gray-300 rounded-lg w-full text-gray-600"
             />
           </div>
 
@@ -157,7 +156,7 @@ const AddTutorials = () => {
               value={formData.image}
               onChange={handleChange}
               placeholder="Enter tutorial image URL"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             />
           </div>
@@ -168,7 +167,7 @@ const AddTutorials = () => {
               name="country"
               value={formData.country}
               onChange={handleChange}
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             >
               <option value="" disabled>
@@ -212,7 +211,7 @@ const AddTutorials = () => {
               name="language"
               value={formData.language}
               onChange={handleChange}
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             >
               <option value="" disabled>
@@ -237,7 +236,7 @@ const AddTutorials = () => {
               value={formData.price}
               onChange={handleChange}
               placeholder="Enter price"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
             />
           </div>
@@ -252,7 +251,7 @@ const AddTutorials = () => {
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter tutorial description"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               rows="4"
               required
             ></textarea>
@@ -267,7 +266,7 @@ const AddTutorials = () => {
               value={formData.review}
               onChange={handleChange}
               placeholder="Enter Review"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 w-full focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
               required
               readOnly={location.state ? true : false}
             />

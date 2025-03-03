@@ -4,19 +4,49 @@ import { AuthContext } from "../provider/AuthProvider";
 import { FaUserAlt } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
 import logo from "../assets/logo.png";
+import axios from "axios";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, logOut, imageKey, cart, theme, setTheme } =
     useContext(AuthContext);
   const [isHovered, setIsHovered] = useState(false);
+  // const [isTutor, setIsTutor] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(false);
 
+  const axiosPublic = useAxiosPublic();
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: isTutor = false,
+    refetch,
+  } = useQuery({
+    queryKey: ["tutor"],
+    queryFn: async () => {
+      const response = await axiosPublic.get(`/tutors/${user?.email}`);
+      return response.data.isTutor;
+    },
+  });
+
+  const { data: isAdmin = false } = useQuery({
+    queryKey: ["admin"],
+    queryFn: async () => {
+      const response = await axiosPublic.get(`/users/${user?.email}`);
+      return response.data.isTutor;
+    },
+  });
   const handleToggle = (e) => {
     if (e.target.checked && localStorage.getItem("theme") == "light") {
       setTheme("dark");
     } else {
       setTheme("light");
     }
-    console.log(localStorage.getItem("theme"));
   };
 
   useEffect(() => {
@@ -48,7 +78,7 @@ const Navbar = () => {
                     user.photoURL ||
                     "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/316600/316631.1.png"
                   }
-                  alt="Tailwind CSS Navbar component"
+                  alt="navbar"
                 />
               </div>
             </div>
@@ -66,7 +96,7 @@ const Navbar = () => {
 
           <button
             onClick={handleLogOut}
-            className="my-5 rounded-xl font-medium text-white-700 hover:text-blue-600 text-sm btn btn-sm btn-warning"
+            className="bg-orange-500 my-5 border-none rounded-xl font-medium text-white text-white-700 hover:text-blue-600 text-sm btn btn-sm"
           >
             LogOut
           </button>
@@ -82,7 +112,9 @@ const Navbar = () => {
             to="/login"
             className="mx-3 rounded-md font-medium hover:text-blue-600 text-sm"
           >
-            <button className="py-2 btn btn-sm btn-success">Login</button>
+            <button className="bg-orange-500 py-2 border-none text-white btn btn-sm">
+              Login
+            </button>
           </NavLink>
         </div>
       )}
@@ -99,7 +131,7 @@ const Navbar = () => {
 
       {user ? (
         <div className="flex lg:flex-row flex-col gap-2">
-          <NavLink
+          {/* <NavLink
             to="/addTutorials"
             className="bg-white btn-outline btn btn-sm"
           >
@@ -110,13 +142,36 @@ const Navbar = () => {
             className="bg-white btn-outline btn btn-sm"
           >
             My Tutorials
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to={`/booked-tutors/${user.email}`}
             className="bg-white btn-outline btn btn-sm"
           >
             My Booked Tutors
           </NavLink>
+
+          {isAdmin ? (
+            <NavLink
+              to={`/admin-dashboard`}
+              className="bg-white btn-outline btn btn-sm"
+            >
+              Admin Dashboard
+            </NavLink>
+          ) : isTutor ? (
+            <NavLink
+              to={`/dashboard`}
+              className="bg-white btn-outline btn btn-sm"
+            >
+              Dashboard
+            </NavLink>
+          ) : (
+            <NavLink
+              to={`/become-tutor`}
+              className="bg-white btn-outline btn btn-sm"
+            >
+              Become a Tutor
+            </NavLink>
+          )}
         </div>
       ) : (
         ""
@@ -126,6 +181,7 @@ const Navbar = () => {
       </NavLink>
     </div>
   );
+
   return (
     <>
       <div className="flex justify-between items-center bg-none mx-auto my-2 w-11/12 md:w-10/12 absolue">

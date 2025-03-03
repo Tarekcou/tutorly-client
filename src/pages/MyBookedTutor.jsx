@@ -4,30 +4,51 @@ import TutorCard from "./AllTutor/TutorCard";
 import { AuthContext } from "../provider/AuthProvider";
 import MyBookedTutorCard from "./MyBookedTutorCard";
 import Loading from "../components/Loading";
-
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 const MyBookedTutor = () => {
-  const myBookedTutor = useLoaderData();
-  const { user, isLoading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const axiosPublic = useAxiosPublic();
   // console.log(myBookedTutor);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    // Simulate a network request (remove this if useLoaderData() already handles loading)
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: myBookedTutor = [],
+    refetch,
+  } = useQuery({
+    queryKey: ["BookedTutor", user?.email], // Ensures query updates when email changes
+    queryFn: async () => {
+      if (!user?.email) return []; // Avoid running query when user is undefined
+      const response = await axiosPublic.get(`/booked-tutors/${user.email}`);
+      return response?.data || [];
+    },
+    enabled: !!user?.email, // Prevents query from running if user is not logged in
+  });
 
-  if (myBookedTutor.length == 0) {
+  if (isLoading) {
     return (
-      <div className="mt-44 text-gray-700 text-center">
-        You have not Booked any tutorials yet.
+      <div className="-mt-28 font-semibold text-blue-500 text-lg text-center">
+        <Loading />
+      </div>
+    );
+  }
+
+  if (!myBookedTutor?.length) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-gray-700 text-center">
+        You have not booked any tutors yet.
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
-      {loading ? (
+    <div className="py-20">
+      {isLoading ? (
         <div className="-mt-28 font-semibold text-blue-500 text-lg text-center">
           <Loading />
         </div>

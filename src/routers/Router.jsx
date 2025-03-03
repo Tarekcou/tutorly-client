@@ -4,8 +4,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
 import ErrorPage from "../pages/ErrorPage";
-import AddTutorials from "../pages/AddTutorials";
-import MyTutorials from "../pages/MyTutorials";
+import AddTutorials from "../pages/Dashboard/AddTutorials";
+import MyTutorials from "../pages/Dashboard/MyTutorials";
 import ContactPage from "../pages/ContactPage";
 import GetStartedPage from "../pages/GetStartedPage";
 import LogInPage from "../pages/LogInPage";
@@ -16,6 +16,10 @@ import MyBookedTutor from "../pages/MyBookedTutor";
 import UpdateTutorials from "../pages/UpdateTutorials";
 import FindAllTutors from "../pages/AllTutor/FindAllTutors";
 import PrivateRouter from "./PrivateRouter";
+import BecomeTutor from "../components/BecomeTutor";
+import BecomeTutorPage from "../pages/BecomeTutorPage";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import BecomeTutorForm from "../pages/BecomeTutorForm";
 
 const router = createBrowserRouter([
   {
@@ -26,26 +30,26 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: async () => {
-          const res = await fetch(
-            "https://tutor-booking-server-olive.vercel.app/tutorials"
-          );
-          const data = await res.json();
-          // console.log(data);
-          return data;
-        },
+        // loader: async () => {
+        //   const res = await fetch(
+        //     "https://tutor-booking-server-olive.vercel.app/tutorials"
+        //   );
+        //   const data = await res.json();
+        //   // console.log(data);
+        //   return data;
+        // },
       },
       {
         path: "/find-tutors",
         element: <FindAllTutors />,
-        loader: async () => {
-          const res = await fetch(
-            "https://tutor-booking-server-olive.vercel.app/tutorials"
-          );
-          const data = await res.json();
-          // console.log(data);
-          return data;
-        },
+        // loader: async () => {
+        //   const res = await fetch(
+        //     "https://tutor-booking-server-olive.vercel.app/tutorials"
+        //   );
+        //   const data = await res.json();
+        //   // console.log(data);
+        //   return data;
+        // },
       },
       {
         path: "/find-tutors/get-started",
@@ -95,17 +99,24 @@ const router = createBrowserRouter([
             <MyTutorials />
           </PrivateRouter>
         ),
-        // loader: async ({ params }) => {
-        //   // console.log(params);
-        //   const res = await fetch(
-        //     `https://tutor-booking-server-olive.vercel.app/myTutorials/${params.myEmail}`
-        //   );
-        //   const data = await res.json();
-        //   console.log(data);
-
-        //   return data;
-        // },
       },
+      {
+        path: "/become-tutor",
+        element: (
+          <PrivateRouter>
+            <BecomeTutorPage />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/become-tutor-form",
+        element: (
+          <PrivateRouter>
+            <BecomeTutorForm />
+          </PrivateRouter>
+        ),
+      },
+
       {
         path: "/booked-tutors/:myEmail",
         element: (
@@ -113,20 +124,28 @@ const router = createBrowserRouter([
             <MyBookedTutor />
           </PrivateRouter>
         ),
-        loader: async ({ params }) => {
-          // console.log(params);
-          const res = await fetch(
-            `https://tutor-booking-server-olive.vercel.app/booked-tutors/${params.myEmail}`
-          );
-          const data = await res.json();
-          return data;
-        },
       },
       { path: "/login", element: <LogInPage /> },
       { path: "/signUp", element: <SignUpPage /> },
       { path: "/forgot-password", element: <ForgotPasswordPage /> },
       { path: "/contact", element: <ContactPage /> },
     ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRouter>
+        <Dashboard />
+      </PrivateRouter>
+    ),
+  },
+  {
+    path: "/admin-dashboard",
+    element: (
+      <PrivateRouter>
+        <Dashboard />
+      </PrivateRouter>
+    ),
   },
 
   {

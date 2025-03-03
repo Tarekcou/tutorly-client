@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link, useLoaderData, useParams } from "react-router-dom";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const MyTutorials = () => {
   // const tutorials = useLoaderData();
@@ -11,9 +13,11 @@ const MyTutorials = () => {
   const [selectedTutorial, setSelectedTutorial] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [tutorials, setTutorials] = useState([]);
-  const params = useParams();
+  const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxiosPublic();
+  console.log(user.email);
   useEffect(() => {
     // Simulate a network request (remove this if useLoaderData() already handles loading)
     setTimeout(() => {
@@ -22,10 +26,13 @@ const MyTutorials = () => {
   }, []);
   useEffect(() => {
     // Fetch data from the server
-    axios
-      .get(
-        `https://https://tutor-booking-server-olive.vercel.app/myTutorials/${params.myEmail}`
-      )
+    axiosPublic
+      .get(`/myTutorials/${user.email}`)
+      .then((res) => {
+        console.log(res.data);
+        setTutorials(res.data);
+      })
+
       .then((res) => setTutorials(res.data));
   }, []);
   const handleDelete = async (id) => {

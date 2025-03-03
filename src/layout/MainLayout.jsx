@@ -19,7 +19,7 @@ const MainLayout = () => {
     };
   }, []);
   const { isLoading, setLoading } = useContext(AuthContext);
-  console.log(isLoading);
+  // console.log(isLoading);
   useEffect(() => {
     // fetch data here
     setLoading(true);

@@ -5,10 +5,13 @@ import { FaStar } from "react-icons/fa6";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const TutorCard = ({ tutor, user }) => {
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
   // console.log(tutor);
+
   const handleBooked = () => {
     const bookedTutor = {
       tutorId: tutor._id,
@@ -21,23 +24,18 @@ const TutorCard = ({ tutor, user }) => {
       email: user.email,
       // Assuming user ID is stored in a global state
     };
-    axios
-      .post(
-        "https://tutor-booking-server-olive.vercel.app/add-booked-tutorials",
-        bookedTutor
-      )
-      .then((res) => {
-        console.log(res);
-        // console.log(res);
-        if (res.status == 200) {
-          Swal.fire({
-            title: "Booked this tutorial!",
-            text: "You booked the tutorial!",
-            icon: "success",
-          });
-          navigate(`/booked-tutors/${user.email}`);
-        }
-      });
+    axiosPublic.post("/add-booked-tutorials", bookedTutor).then((res) => {
+      console.log(res);
+      // console.log(res);
+      if (res.status == 200) {
+        Swal.fire({
+          title: "Booked this tutorial!",
+          text: "You booked the tutorial!",
+          icon: "success",
+        });
+        navigate(`/booked-tutors/${user.email}`);
+      }
+    });
   };
   const handleDelete = (id) => {
     Swal.fire({
@@ -50,10 +48,8 @@ const TutorCard = ({ tutor, user }) => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const response = await axios
-          .delete(
-            `https://tutor-booking-server-olive.vercel.app/tutorials/${id}`
-          )
+        const response = await axiosPublic
+          .delete(`/tutorials/${id}`)
           .then((response) => {
             if (response.status === 200) {
               Swal.fire({
@@ -69,11 +65,18 @@ const TutorCard = ({ tutor, user }) => {
 
   return (
     <div>
-      <div className="group relative flex md:flex-row flex-col gap-3 h-auto min-h-44">
-        <div className="group relative flex md:flex-row flex-col items-center gap-3 bg-white shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-9/12">
+      <div
+        data-aos="fade-right"
+        className="group relative flex md:flex-row flex-col gap-3 h-auto min-h-44"
+      >
+        <div
+          className={`group relative flex md:flex-row flex-col items-center gap-3  shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-9/12 ${
+            user?.email === tutor?.email ? "bg-green-100" : "bg-white"
+          }`}
+        >
           <div className="flex md:flex-row flex-col items-center gap-3 w-8/12">
             <img
-              src={tutor?.image}
+              src={tutor?.imageUrl}
               alt={tutor?.name}
               className="rounded-full w-32 h-32"
             />
@@ -84,7 +87,7 @@ const TutorCard = ({ tutor, user }) => {
                 <FaLocationDot />
                 {tutor.country}
               </p>
-              <p>Language: {tutor.language}</p>
+              <p>Language: {tutor.languages.join(", ")}</p>
 
               <p className="mt-2 text-gray-700">{tutor.description}</p>
             </div>
@@ -101,7 +104,7 @@ const TutorCard = ({ tutor, user }) => {
                 </span>
               </div>
               <p className="font-bold text-pink-600">
-                ${tutor.price} / 50-min lesson
+                ${tutor.hourlyRate} / 50-min lesson
               </p>
             </div>
             <div>
@@ -136,7 +139,7 @@ const TutorCard = ({ tutor, user }) => {
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"
-              src={tutor.image}
+              src={tutor.imageUrl}
               alt=""
             />
             <Link

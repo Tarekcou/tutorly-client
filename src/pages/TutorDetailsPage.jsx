@@ -1,15 +1,18 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 const TutorDetailsPage = () => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
+  const navigate = useNavigate();
   const getTutor = location.state?.tutor || location.state?.tutors; // Destructure the passed tutor object
-  console.log(getTutor, location);
+  // console.log(getTutor, location);
   const [tutor, setTutors] = useState(getTutor);
+  const axiosPublic = useAxiosPublic();
   // console.log(tutor);
   if (!tutor) {
     return <p className="mt-28 text-red-500">No tutor data available.</p>;
@@ -27,20 +30,15 @@ const TutorDetailsPage = () => {
       email: user.email,
       // Assuming user ID is stored in a global state
     };
-    axios
-      .post(
-        "https://tutor-booking-server-olive.vercel.app/add-booked-tutorials",
-        bookedTutor
-      )
-      .then((res) => {
-        console.log(res);
-        Swal.fire({
-          title: "One Tutorial Added !",
-          text: "Congratulation one tutorial added!",
-          icon: "success",
-        });
-        navigate(`/booked-tutors/${user.email}`);
+    axiosPublic.post("/add-booked-tutorials", bookedTutor).then((res) => {
+      console.log(res);
+      Swal.fire({
+        title: "One Tutorial Added !",
+        text: "Congratulation one tutorial added!",
+        icon: "success",
       });
+      navigate(`/booked-tutors/${user.email}`);
+    });
   };
   // console.log(tutor);
 
@@ -50,9 +48,9 @@ const TutorDetailsPage = () => {
         {/* Tutor Image */}
         <div className="flex-shrink-0">
           <img
-            src={tutor.image || "https://via.placeholder.com/150"}
+            src={tutor.imageUrl || "https://via.placeholder.com/150"}
             alt={tutor.name}
-            className="border-gray-300 border rounded-full w-32 h-32"
+            className="border border-gray-300 rounded-full w-32 h-32"
           />
         </div>
 
@@ -60,10 +58,10 @@ const TutorDetailsPage = () => {
         <div className="flex-1">
           <h2 className="font-bold text-2xl">{tutor.name}</h2>
           <p className="text-gray-500 text-sm">
-            {tutor.language || 0} language
+            {tutor?.languages?.join(", ") || 0} language
           </p>
           <p className="mt-1 text-gray-600">
-            {tutor.description ||
+            {tutor?.description ||
               "Qualified tutor with years of experience helping students excel."}
           </p>
           <div className="flex sm:flex-row flex-col sm:items-center sm:space-x-4 mt-4">
@@ -99,7 +97,7 @@ const TutorDetailsPage = () => {
         </button>
         <Link
           to="/contact"
-          className="border-gray-300 hover:bg-gray-100 px-6 py-2 border rounded-lg text-gray-600"
+          className="hover:bg-gray-100 px-6 py-2 border border-gray-300 rounded-lg text-gray-600"
         >
           Send message
         </Link>
