@@ -30,6 +30,7 @@ const Navbar = () => {
     queryKey: ["tutor"],
     queryFn: async () => {
       const response = await axiosPublic.get(`/tutors/${user?.email}`);
+      refetch();
       return response.data.isTutor;
     },
   });
@@ -38,6 +39,7 @@ const Navbar = () => {
     queryKey: ["admin"],
     queryFn: async () => {
       const response = await axiosPublic.get(`/users/${user?.email}`);
+      refetch();
       return response.data.isTutor;
     },
   });

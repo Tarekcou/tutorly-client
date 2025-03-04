@@ -30,75 +30,79 @@ const Dashboard = () => {
       if (response.data.isAdmin) setIsAdmin(true);
     });
   }, []);
-
+  const dashboardMenu = (
+    <>
+      <button
+        onClick={() => setActivePage("addTutorial")}
+        className={`flex items-center space-x-2 p-3 rounded-lg ${
+          activePage === "addTutorial" ? "bg-blue-500" : "hover:bg-gray-700"
+        }`}
+      >
+        <FaPlus />
+        <span>Add Tutorials</span>
+      </button>
+      <button
+        onClick={() => setActivePage("myTutorials")}
+        className={`flex items-center space-x-2 p-3 rounded-lg ${
+          activePage === "myTutorials" ? "bg-blue-500" : "hover:bg-gray-700"
+        }`}
+      >
+        <FaBook />
+        <span>My Tutorials</span>
+      </button>
+      {!isAdmin && (
+        <button
+          onClick={() => setActivePage("profile")}
+          className={`flex items-center space-x-2 p-3 rounded-lg ${
+            activePage === "profile" ? "bg-blue-500" : "hover:bg-gray-700"
+          }`}
+        >
+          <FaUser />
+          <span>Profile</span>
+        </button>
+      )}
+      {/* New Manage Users Button */}
+      {isAdmin && (
+        <>
+          <button
+            onClick={() => setActivePage("manageTutors")}
+            className={`flex items-center space-x-2 p-3 rounded-lg ${
+              activePage === "manageTutors"
+                ? "bg-blue-500"
+                : "hover:bg-gray-700"
+            }`}
+          >
+            <FaUsers />
+            <span>Manage Tutors</span>
+          </button>
+          <button
+            onClick={() => setActivePage("manageUsers")}
+            className={`flex items-center space-x-2 p-3 rounded-lg ${
+              activePage === "manageUsers" ? "bg-blue-500" : "hover:bg-gray-700"
+            }`}
+          >
+            <FaUserAlt />
+            <span>Manage Users</span>
+          </button>
+        </>
+      )}
+      <Link
+        to="/"
+        className="flex justify-center items-center space-x-2 bg-red-500 hover:bg-red-600 mt-10 p-3 rounded-lg text-white text-center"
+      >
+        <FaHome />
+        <span>Home</span>
+      </Link>
+    </>
+  );
   return (
     <div className="flex h-screen">
       {/* Sidebar (Fixed for Desktop) */}
       <div className="hidden fixed md:flex flex-col bg-gray-800 p-5 w-64 h-full text-white">
-        <h2 className="mb-6 font-bold text-xl text-center">Tutor Dashboard</h2>
-        <nav className="flex flex-col space-y-4">
-          <button
-            onClick={() => setActivePage("addTutorial")}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "addTutorial" ? "bg-blue-500" : "hover:bg-gray-700"
-            }`}
-          >
-            <FaPlus />
-            <span>Add Tutorials</span>
-          </button>
-          <button
-            onClick={() => setActivePage("myTutorials")}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "myTutorials" ? "bg-blue-500" : "hover:bg-gray-700"
-            }`}
-          >
-            <FaBook />
-            <span>My Tutorials</span>
-          </button>
-          <button
-            onClick={() => setActivePage("profile")}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "profile" ? "bg-blue-500" : "hover:bg-gray-700"
-            }`}
-          >
-            <FaUser />
-            <span>Profile</span>
-          </button>
-          {/* New Manage Users Button */}
-          {isAdmin && (
-            <>
-              <button
-                onClick={() => setActivePage("manageTutors")}
-                className={`flex items-center space-x-2 p-3 rounded-lg ${
-                  activePage === "manageTutors"
-                    ? "bg-blue-500"
-                    : "hover:bg-gray-700"
-                }`}
-              >
-                <FaUsers />
-                <span>Manage Tutors</span>
-              </button>
-              <button
-                onClick={() => setActivePage("manageUsers")}
-                className={`flex items-center space-x-2 p-3 rounded-lg ${
-                  activePage === "manageUsers"
-                    ? "bg-blue-500"
-                    : "hover:bg-gray-700"
-                }`}
-              >
-                <FaUserAlt />
-                <span>Manage Users</span>
-              </button>
-            </>
-          )}
-          <Link
-            to="/"
-            className="flex justify-center items-center space-x-2 bg-red-500 hover:bg-red-600 mt-10 p-3 rounded-lg text-white text-center"
-          >
-            <FaHome />
-            <span>Home</span>
-          </Link>
-        </nav>
+        <h2 className="mb-6 font-bold text-xl text-center">
+          {isAdmin ? "Admin" : "Tutor"} Dashboard
+        </h2>
+        <nav className="flex flex-col space-y-4">{dashboardMenu}</nav>
       </div>
 
       {/* Drawer Button for Mobile */}
@@ -124,79 +128,7 @@ const Dashboard = () => {
         <h2 className="mb-6 font-bold text-xl text-center">
           {isAdmin ? "Admin" : "Tutor"} Dashboard
         </h2>
-        <nav className="flex flex-col space-y-4">
-          <button
-            onClick={() => {
-              setActivePage("addTutorial");
-              setIsDrawerOpen(false);
-            }}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "addTutorial" ? "bg-blue-500" : "hover:bg-gray-700"
-            }`}
-          >
-            <FaPlus />
-            <span>Add Tutorials</span>
-          </button>
-          <button
-            onClick={() => {
-              setActivePage("myTutorials");
-              setIsDrawerOpen(false);
-            }}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "myTutorials" ? "bg-blue-500" : "hover:bg-gray-700"
-            }`}
-          >
-            <FaBook />
-            <span>My Tutorials</span>
-          </button>
-          <button
-            onClick={() => {
-              setActivePage("profile");
-              setIsDrawerOpen(false);
-            }}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "profile" ? "bg-blue-500" : "hover:bg-gray-700"
-            }`}
-          >
-            <FaUser />
-            <span>Profile</span>
-          </button>
-          {/* New Manage Tutors Button */}
-          <button
-            onClick={() => {
-              setActivePage("manageTutors");
-              setIsDrawerOpen(false);
-            }}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "manageTutors"
-                ? "bg-blue-500"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            <FaUsers />
-            <span>Manage Tutors</span>
-          </button>
-          {/* New Manage Users Button */}
-          <button
-            onClick={() => {
-              setActivePage("manageUsers");
-              setIsDrawerOpen(false);
-            }}
-            className={`flex items-center space-x-2 p-3 rounded-lg ${
-              activePage === "manageUsers" ? "bg-blue-500" : "hover:bg-gray-700"
-            }`}
-          >
-            <FaUsers />
-            <span>Manage Users</span>
-          </button>
-          <Link
-            to="/"
-            className="flex justify-center items-center space-x-2 bg-red-500 hover:bg-red-600 mt-10 p-3 rounded-lg text-white text-center"
-          >
-            <FaHome />
-            <span>Home</span>
-          </Link>
-        </nav>
+        <nav className="flex flex-col space-y-4">{dashboardMenu}</nav>
       </div>
 
       {/* Main Content (Scrollable) */}
