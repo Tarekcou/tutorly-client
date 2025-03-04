@@ -121,7 +121,9 @@ const Dashboard = () => {
           isDrawerOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 md:hidden`}
       >
-        <h2 className="mb-6 font-bold text-xl text-center">Tutor Dashboard</h2>
+        <h2 className="mb-6 font-bold text-xl text-center">
+          {isAdmin ? "Admin" : "Tutor"} Dashboard
+        </h2>
         <nav className="flex flex-col space-y-4">
           <button
             onClick={() => {
@@ -159,16 +161,29 @@ const Dashboard = () => {
             <FaUser />
             <span>Profile</span>
           </button>
-          {/* New Manage Users Button */}
+          {/* New Manage Tutors Button */}
           <button
             onClick={() => {
-              setActivePage("manageTutos");
+              setActivePage("manageTutors");
               setIsDrawerOpen(false);
             }}
             className={`flex items-center space-x-2 p-3 rounded-lg ${
               activePage === "manageTutors"
                 ? "bg-blue-500"
                 : "hover:bg-gray-700"
+            }`}
+          >
+            <FaUsers />
+            <span>Manage Tutors</span>
+          </button>
+          {/* New Manage Users Button */}
+          <button
+            onClick={() => {
+              setActivePage("manageUsers");
+              setIsDrawerOpen(false);
+            }}
+            className={`flex items-center space-x-2 p-3 rounded-lg ${
+              activePage === "manageUsers" ? "bg-blue-500" : "hover:bg-gray-700"
             }`}
           >
             <FaUsers />

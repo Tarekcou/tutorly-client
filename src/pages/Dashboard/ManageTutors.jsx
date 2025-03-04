@@ -70,7 +70,7 @@ const ManageTutors = () => {
               <tr key={tutor._id} className="text-center">
                 <td className="px-4 py-2 border">
                   <img
-                    src={tutor.imageUrl || "https://via.placeholder.com/50"}
+                    src={tutor.imageUrl}
                     alt={tutor.name}
                     className="mx-auto rounded-full w-12 h-12"
                   />

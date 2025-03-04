@@ -4,24 +4,22 @@ import { AuthContext } from "../../provider/AuthProvider";
 import axios from "axios";
 import BecomeTutorPage from "../BecomeTutorPage";
 import BecomeTutorForm from "../BecomeTutorForm";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [tutor, setTutor] = useState({});
   const navigate = useNavigate(); // Initialize navigate hook
   const [showBecomeTutorPage, setShowBecomeTutorPage] = useState(false);
-
+  const axiosPublic = useAxiosPublic();
   useEffect(() => {
     try {
-      axios
-        .get(
-          `https://tutor-booking-server-olive.vercel.app/tutors/${user.email}`
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setTutor(res.data);
-          }
-        });
+      axiosPublic.get(`/tutors/${user.email}`).then((res) => {
+        console.log(res.data);
+        if (res.status === 200) {
+          setTutor(res.data);
+        }
+      });
     } catch (error) {
       console.error("Error Getting Tutor", error);
     }
@@ -41,7 +39,7 @@ const Profile = () => {
         <div className="bg-white shadow-md mx-auto p-6 rounded-lg w-full max-w-lg text-center">
           {/* User Photo */}
           <img
-            src={tutor.imageUrl || "https://via.placeholder.com/150"}
+            src={tutor.imageUrl}
             alt={tutor.name}
             className="mx-auto border-4 border-blue-500 rounded-full w-24 h-24"
           />
