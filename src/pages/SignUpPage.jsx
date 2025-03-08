@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye } from "react-icons/fa";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -73,16 +74,19 @@ const SignUpPage = () => {
             isAdmin: false,
           };
           // console.log(userInfo);
-          axiosPublic.post("/user", userInfo).then((res) => {
-            if (res.data.insertedId) {
+          axiosPublic.post("/users", userInfo).then((res) => {
+            console.log(res);
+            Swal.fire({
+              title: "Sign up successful",
+              text: "Congratulations",
+              icon: "success",
+            });
+            if (location?.state) navigate(location?.state);
+            else {
               navigate("/");
             }
           });
         });
-
-        setimageKey((prev) => prev + 1);
-
-        // ...
       })
 
       .catch((error) => {
@@ -98,7 +102,6 @@ const SignUpPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    toast("Register is processing..");
     googleLogin()
       .then((result) => {
         console.log(result);
@@ -109,6 +112,11 @@ const SignUpPage = () => {
         };
         axiosPublic.post("/users", userInfo).then((res) => {
           // console.log(res);
+          Swal.fire({
+            title: "Sign up successful",
+            text: "Congratulations",
+            icon: "success",
+          });
           if (location?.state) navigate(location?.state);
           else {
             navigate("/");
@@ -133,7 +141,7 @@ const SignUpPage = () => {
         <Loading />
       ) : (
         <>
-          <div className="bg-white shadow-lg p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12">
+          <div className="bg-white shadow-lg mt-20 p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12">
             <h2 className="font-bold text-green-700 text-3xl text-center">
               Register
             </h2>
@@ -162,7 +170,7 @@ const SignUpPage = () => {
                 </label>
                 <input
                   type="email"
-                  id="email"
+                  id="signUpEmail"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -219,9 +227,9 @@ const SignUpPage = () => {
               </div>
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg focus:outline-none w-full text-white"
+                className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg focus:outline-none w-full text-white"
               >
-                Sign up
+                Sign Up
               </button>
             </form>
             {/* Divider */}
@@ -233,9 +241,9 @@ const SignUpPage = () => {
             <button
               onClick={handleGoogleLogin}
               type="submit"
-              className="flex justify-center items-center gap-2 bg-green-600 hover:bg-green-800 my-2 px-4 py-2 rounded-lg focus:outline-none w-full text-white cursor-pointer"
+              className="flex justify-center items-center gap-2 btn-outline w-full cursor-pointer btn"
             >
-              <FaGoogle className="" /> Continue with Google
+              <FaGoogle className="text-green-500" /> Continue with Google
             </button>
 
             <p className="mt-4 text-gray-600 text-sm text-center">

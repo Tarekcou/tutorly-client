@@ -6,6 +6,7 @@ import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa6";
 import MainLayout from "../layout/MainLayout";
 import toast from "react-hot-toast";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 const LogInPage = () => {
   const [email, setEmail] = useState("");
@@ -26,16 +27,19 @@ const LogInPage = () => {
     setLoading(true);
     // Add your login logic here
     // ("Login details:", { email, password });
-    toast.loading("Log in Processing..");
 
     signedIn(email, password)
       .then((userCredential) => {
+        Swal.fire({
+          title: "Sign up successful",
+          text: "Congratulations",
+          icon: "success",
+        });
         // Signed in
         if (location?.state) navigate(location?.state);
         else {
           navigate("/");
         }
-        toast.success("Loged in");
         const user = userCredential.user;
         setUser(user);
         setLoading(false);
@@ -53,7 +57,6 @@ const LogInPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    toast("Register is processing..");
     googleLogin()
       .then((result) => {
         const userInfo = {
@@ -62,6 +65,11 @@ const LogInPage = () => {
           isAdmin: false,
         };
         axiosPublic.post("/users", userInfo).then((res) => {
+          Swal.fire({
+            title: "Sign up successful",
+            text: "Congratulations",
+            icon: "success",
+          });
           if (location?.state) navigate(location?.state);
           else {
             // console.log(location);
@@ -87,6 +95,16 @@ const LogInPage = () => {
   const handleForgotPasswordClick = () => {
     // Redirect to forgot password page with email as a query param
     // history.push(`/forgot-password?email=${email}`);
+  };
+  // ✅ Set predefined admin/tutor credentials
+  const fillAdminCredentials = () => {
+    setEmail("admin@gmail.com");
+    setPassword("Admin@123");
+  };
+
+  const fillTutorCredentials = () => {
+    setEmail("tutor@gmail.com");
+    setPassword("Tutor@123");
   };
 
   return (
@@ -161,6 +179,21 @@ const LogInPage = () => {
               Login
             </button>
           </form>
+          {/* ✅ Admin & Tutor Credential Buttons */}
+          <div className="flex justify-center gap-4 my-4">
+            <button
+              onClick={fillAdminCredentials}
+              className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-white"
+            >
+              Admin Credential
+            </button>
+            <button
+              onClick={fillTutorCredentials}
+              className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white"
+            >
+              Tutor Credential
+            </button>
+          </div>
           {/* Divider */}
           <div className="flex items-center my-6">
             <div className="flex-grow border-gray-300 border-t"></div>
