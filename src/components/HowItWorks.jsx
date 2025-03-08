@@ -113,7 +113,7 @@ const HowItWorks = () => {
         </div>
       </div>
       {/* Full-Width Section */}
-      <div className="bg-blue-400 mt-10 py-20 w-screen text-center">
+      <div className="bg-gradient-to-b from-teal-500 to-teal-300 mt-10 py-20 w-screen text-center">
         <h1 className="font-bold text-white text-5xl md:text-6xl">
           Lessons you’ll love. Guaranteed.
         </h1>

@@ -6,71 +6,69 @@ import Swal from "sweetalert2";
 import Loading from "../../components/Loading";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { AuthContext } from "../../provider/AuthProvider";
+import UploadTutorial from "./UploadTutorial";
+import { useQuery } from "@tanstack/react-query";
 
 const MyTutorials = () => {
   // const tutorials = useLoaderData();
   // console.log(tutorials);
-  const [selectedTutorial, setSelectedTutorial] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [tutorials, setTutorials] = useState([]);
+  const [showUpdate, setShowUpdate] = useState(false);
+  const [updateTutorial, setUpdateTutorial] = useState([]);
   const { user } = useContext(AuthContext);
-  const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
-  console.log(user.email);
-  useEffect(() => {
-    // Simulate a network request (remove this if useLoaderData() already handles loading)
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
-  useEffect(() => {
-    // Fetch data from the server
-    axiosPublic
-      .get(`/myTutorials/${user.email}`)
-      .then((res) => {
-        console.log(res.data);
-        setTutorials(res.data);
-      })
 
-      .then((res) => setTutorials(res.data));
-  }, []);
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: tutorials = [],
+    refetch,
+  } = useQuery({
+    queryKey: ["myTutorials", user.email],
+    queryFn: async () => {
+      const response = await axiosPublic.get(`/tutorials/email/${user.email}`);
+
+      if (response.data) {
+        return response.data;
+      }
+    },
+  });
   const handleDelete = async (id) => {
-    console.log(id);
     try {
-      await axios
-        .delete(`https://tutor-booking-server-olive.vercel.app/tutorials/${id}`)
-        .then((data) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Change it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const data = await axiosPublic.delete(`/tutorials/${id}`);
           console.log(data);
           if (data.status === 200) {
             Swal.fire({
-              title: "success!",
+              title: "Success!",
               text: "One tutorial has been deleted",
               icon: "success",
-              confirmButtonText: "ok",
+              confirmButtonText: "OK",
             });
+            refetch();
           }
-        }); // Replace with your API endpoint
+        }
+      });
     } catch (error) {
       console.error("Error deleting tutorial:", error);
-      Swal.fire({
-        title: "error!",
-        text: "Something Went Wrong, Please check",
-        icon: "error",
-        confirmButtonText: "ok",
-      });
     }
   };
 
   const handleUpdate = (tutorial) => {
-    setSelectedTutorial(tutorial);
-    setShowModal(true);
+    setShowUpdate(true);
+    setUpdateTutorial(tutorial);
   };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedTutorial(null);
-  };
+  // console.log(showUpdate);
   if (tutorials.length == 0) {
     return (
       <div className="mt-44 min-h-screen text-gray-700 text-center">
@@ -78,15 +76,23 @@ const MyTutorials = () => {
       </div>
     );
   }
+  const extractYouTubeId = (url) => {
+    const regex =
+      /(?:youtube\.com\/(?:[^\/]+\/[^\/]+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : "";
+  };
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         // Show Loading State
         <div className="-mt-28 font-semibold text-blue-500 text-lg text-center">
           <Loading />
         </div>
+      ) : showUpdate ? (
+        <UploadTutorial updateTutorial={updateTutorial} />
       ) : (
-        <div className="mt-32 p-8">
+        <div className="mt-5 p-4 text-black/80">
           <h1 className="mb-6 font-bold text-2xl">My Tutorials</h1>
           <table className="border border-gray-300 w-full border-collapse table-auto">
             <thead>
@@ -98,7 +104,6 @@ const MyTutorials = () => {
                 <th className="px-4 py-2 border border-gray-300">
                   Description
                 </th>
-                <th className="px-4 py-2 border border-gray-300">Review</th>
                 <th className="px-4 py-2 border border-gray-300">Actions</th>
               </tr>
             </thead>
@@ -109,11 +114,19 @@ const MyTutorials = () => {
                     {tutorial.name}
                   </td>
                   <td className="px-4 py-2 border border-gray-300">
-                    <img
-                      src={tutorial.image}
-                      alt="Tutorial"
-                      className="w-16 h-16 object-cover"
-                    />
+                    <div className="mt-2">
+                      <p>
+                        <strong>Video Preview:</strong>
+                      </p>
+                      <iframe
+                        className="mt-2 border rounded w-full h-64"
+                        src={`https://www.youtube.com/embed/${extractYouTubeId(
+                          tutorial.videoUrl
+                        )}`}
+                        title="YouTube Video"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
                   </td>
                   <td className="px-4 py-2 border border-gray-300">
                     {tutorial.language}
@@ -124,148 +137,25 @@ const MyTutorials = () => {
                   <td className="px-4 py-2 border border-gray-300">
                     {tutorial.description}
                   </td>
-                  <td className="px-4 py-2 border border-gray-300">
-                    {tutorial.review}
-                  </td>
-                  <td className="flex gap-2 px-4 py-2 border border-gray-300">
+
+                  <td className="flex flex-col !justify-center !items-center gap-2 px-4 py-2 border-gray-300 w-full h-full">
                     <button
                       className="bg-red-500 px-4 py-2 rounded text-white"
                       onClick={() => handleDelete(tutorial._id)}
                     >
                       Delete
                     </button>
-                    <Link
-                      to={`/updateTutorials/${tutorial._id}`}
-                      state={{ tutorial }}
+                    <button
+                      onClick={() => handleUpdate(tutorial)}
                       className="bg-blue-500 px-4 py-2 rounded text-white"
                     >
                       Update
-                    </Link>
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-
-          {/* Update Modal */}
-          {/* {showModal && selectedTutorial && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-          <div className="bg-white shadow-lg p-6 rounded w-1/2">
-            <h2 className="mb-4 font-bold text-xl">Update Tutorial</h2>
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                try {
-                  await axios.put(
-                    `/api/tutorials/${selectedTutorial._id}`,
-                    selectedTutorial
-                  ); // Replace with your API endpoint
-                  fetchTutorials();
-                  handleCloseModal();
-                } catch (error) {
-                  console.error("Error updating tutorial:", error);
-                }
-              }}
-            >
-              <div className="mb-4">
-                <label className="block mb-2 font-bold">Name</label>
-                <input
-                  type="text"
-                  value={selectedTutorial.name}
-                  readOnly
-                  className="px-4 py-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-bold">Email</label>
-                <input
-                  type="email"
-                  value={selectedTutorial.email}
-                  readOnly
-                  className="px-4 py-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-bold">Image URL</label>
-                <input
-                  type="text"
-                  value={selectedTutorial.image}
-                  onChange={(e) =>
-                    setSelectedTutorial({
-                      ...selectedTutorial,
-                      image: e.target.value,
-                    })
-                  }
-                  className="px-4 py-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-bold">Language</label>
-                <input
-                  type="text"
-                  value={selectedTutorial.language}
-                  onChange={(e) =>
-                    setSelectedTutorial({
-                      ...selectedTutorial,
-                      language: e.target.value,
-                    })
-                  }
-                  className="px-4 py-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-bold">Price</label>
-                <input
-                  type="number"
-                  value={selectedTutorial.price}
-                  onChange={(e) =>
-                    setSelectedTutorial({
-                      ...selectedTutorial,
-                      price: e.target.value,
-                    })
-                  }
-                  className="px-4 py-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-bold">Description</label>
-                <textarea
-                  value={selectedTutorial.description}
-                  onChange={(e) =>
-                    setSelectedTutorial({
-                      ...selectedTutorial,
-                      description: e.target.value,
-                    })
-                  }
-                  className="px-4 py-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2 font-bold">Review</label>
-                <input
-                  type="text"
-                  value={selectedTutorial.review}
-                  readOnly
-                  className="px-4 py-2 border border-gray-300 rounded w-full"
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-500 mr-2 px-4 py-2 rounded text-white"
-              >
-                Update
-              </button>
-              <button
-                type="button"
-                className="bg-gray-300 px-4 py-2 rounded"
-                onClick={handleCloseModal}
-              >
-                Cancel
-              </button>
-            </form>
-          </div>
-        </div>
-      )} */}
         </div>
       )}
     </>

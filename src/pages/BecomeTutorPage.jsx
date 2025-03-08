@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import becomeTutor from "../assets/becometutor.jpg";
 import becomeTutor2 from "../assets/becomeTutor2.jpg";
 import { FaArrowAltCircleRight } from "react-icons/fa";
@@ -11,22 +11,32 @@ import {
 } from "@tanstack/react-query";
 import Loading from "../components/Loading";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import { AuthContext } from "../provider/AuthProvider";
 const BecomeTutor = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const axiosPublic = useAxiosPublic();
-  const { isPending, isLoading, error, data, refetch } = useQuery({
+  const { user } = useContext(AuthContext);
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: isSubmitted = false,
+    refetch,
+  } = useQuery({
     queryKey: ["isSubmitted"],
     queryFn: async () => {
-      const response = await axiosPublic.get("/tutors");
+      const response = await axiosPublic.get(`/tutors/email/${user.email}`);
 
-      console.log(response);
-      if (response.status === 200) {
-        setIsSubmitted(true);
+      // console.log(response.data);
+      if (response.data?.email) {
+        // refetch();
+        // console.log(response);
+        return true;
       }
     },
   });
   if (isLoading) return <Loading />;
   // verify that is tutor
+  console.log(isSubmitted);
   if (isSubmitted)
     return (
       <div className="flex justify-center items-center w-full h-screen text-center">

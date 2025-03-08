@@ -58,15 +58,15 @@ const router = createBrowserRouter([
       {
         path: "/find-tutors/:language",
         element: <FindAllTutors />,
-        loader: async ({ params }) => {
-          console.log(params);
-          const res = await fetch(
-            `https://tutor-booking-server-olive.vercel.app/tutorials/${params.language}`
-          );
-          const data = await res.json();
-          // console.log(data);
-          return data;
-        },
+        // loader: async ({ params }) => {
+        //   console.log(params);
+        //   const res = await fetch(
+        //     `https://tutor-booking-server-olive.vercel.app/tutorials/${params.language}`
+        //   );
+        //   const data = await res.json();
+        //   // console.log(data);
+        //   return data;
+        // },
       },
       {
         path: "/tutor/details",

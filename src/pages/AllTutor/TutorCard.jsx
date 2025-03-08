@@ -6,8 +6,9 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
-const TutorCard = ({ tutor, user }) => {
+const TutorCard = ({ tutor, user, handleDelete }) => {
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   // console.log(tutor);
@@ -15,7 +16,7 @@ const TutorCard = ({ tutor, user }) => {
   const handleBooked = () => {
     const bookedTutor = {
       tutorId: tutor._id,
-      image: tutor.image,
+      image: tutor.imageUrl,
       language: tutor.language,
       price: tutor.price,
       country: tutor.country,
@@ -25,54 +26,46 @@ const TutorCard = ({ tutor, user }) => {
       // Assuming user ID is stored in a global state
     };
     axiosPublic.post("/add-booked-tutorials", bookedTutor).then((res) => {
-      console.log(res);
+      // console.log(res);
       // console.log(res);
       if (res.status == 200) {
         Swal.fire({
-          title: "Booked this tutorial!",
-          text: "You booked the tutorial!",
+          title: "Booked this tutor!",
+          text: "You booked the tutor!",
           icon: "success",
         });
-        navigate(`/booked-tutors/${user.email}`);
-      }
-    });
-  };
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const response = await axiosPublic
-          .delete(`/tutorials/${id}`)
-          .then((response) => {
-            if (response.status === 200) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success",
-              });
-            }
-          });
+        // navigate(`/booked-tutors/${user.email}`);
       }
     });
   };
 
+  // find reviews
+
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: reviews = [],
+    refetch,
+  } = useQuery({
+    queryKey: ["Reviews", tutor.email], // Unique key per tutor
+    queryFn: async () => {
+      // if (!user?.email) return []; // Avoid running query when user is undefined
+      const response = await axiosPublic.get(`/review/${tutor.email}`);
+      console.log(response.data[0].review.rating);
+      return response?.data || [];
+    },
+  });
+
   return (
-    <div className="my-5">
+    <div className="">
       <div
         data-aos="fade-right"
         className="group relative flex md:flex-row flex-col gap-3 h-auto min-h-44"
       >
-        <Link
-          to={"/tutor/details"}
-          state={{ tutor }}
-          className={`group relative flex md:flex-row flex-col items-center gap-3  shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-9/12 ${
+        <div
+          onClick={() => navigate(`/tutor/details`, { state: { tutor } })}
+          className={`group relative flex md:flex-row flex-col items-center gap-3  shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-9/12 cursor-pointer ${
             user?.email === tutor?.email ? "bg-green-100" : "bg-white"
           }`}
         >
@@ -89,33 +82,40 @@ const TutorCard = ({ tutor, user }) => {
                 <FaLocationDot />
                 {tutor.country}
               </p>
-              <p>Language: {tutor.languages.join(", ")}</p>
+              <p>Language: {tutor.language}</p>
 
               <p className="mt-2 text-gray-700">{tutor.description}</p>
             </div>
           </div>
-          <div className="flex flex-row md:flex-col justify-center items-center gap-3 md:w-4/12 text-center">
+          <div className="flex flex-row md:flex-col justify-between items-center gap-3 w-full md:w-4/12 text-center">
             <div>
-              <div className="flex md:flex-row justify-center items-center gap-3 text-center">
+              <div className="flex md:flex-row flex-col justify-center items-center text-center">
                 <span className="flex items-center gap-1 font-bold text-yellow-500">
-                  {tutor.rating}
+                  {reviews.length > 0
+                    ? (
+                        reviews.reduce(
+                          (acc, r) => acc + (r.review.rating || 0),
+                          0
+                        ) / reviews.length
+                      ).toFixed(1)
+                    : "No ratings yet"}{" "}
                   <FaStar />
                 </span>
-                <span className="p-2 border btn-outline text-gray-600 btn btn-sm">
-                  {tutor?.review} reviews
+                <span className="p-2 text-gray-600">
+                  {reviews.length} reviews
                 </span>
               </div>
-              <p className="font-bold text-pink-600">
+              <p className="md:block top-2 right-2 md:right-10 absolute font-bold text-pink-600">
                 ${tutor.hourlyRate} / 50-min lesson
               </p>
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col justify-end space-y-2">
               <button
                 onClick={handleBooked}
                 className="bg-pink-500 hover:bg-pink-600 mt-2 rounded-lg text-white btn btn-sm"
               >
-                Book trial lesson
+                Book this Tutor
               </button>
               <Link
                 to={"/contact"}
@@ -125,8 +125,15 @@ const TutorCard = ({ tutor, user }) => {
               </Link>
             </div>
           </div>
+          <Link
+            to={"/tutor/details"}
+            state={{ tutor }}
+            className="md:hidden bg-accent w-full text-white btn-accent btn btn-sm"
+          >
+            View Details
+          </Link>
           {/* Delete */}
-          {user?.email === tutor?.email && (
+          {/* {user?.email === tutor?.email && (
             <div
               onClick={() => handleDelete(tutor._id)}
               className="top-3 right-3 absolute text-red-600 text-3xl"
@@ -135,8 +142,8 @@ const TutorCard = ({ tutor, user }) => {
                 <MdOutlineDeleteForever />
               </button>
             </div>
-          )}
-        </Link>
+          )} */}
+        </div>
 
         <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-white shadow-lg w-full md:w-3/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">

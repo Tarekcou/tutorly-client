@@ -10,6 +10,7 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 const MyBookedTutor = () => {
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
@@ -45,11 +46,38 @@ const MyBookedTutor = () => {
       </div>
     );
   }
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await axiosPublic.delete(
+          `/remove-booked-tutorials/${id}`
+        );
+        console.log(response.data);
+
+        if (response.data.deletedCount > 0) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+          refetch();
+        }
+      }
+    });
+  };
 
   return (
-    <div className="py-20">
+    <div className="">
       {isLoading ? (
-        <div className="-mt-28 font-semibold text-blue-500 text-lg text-center">
+        <div className="">
           <Loading />
         </div>
       ) : (
@@ -57,7 +85,12 @@ const MyBookedTutor = () => {
           <h1 className="my-5 font-bold text-3xl text-center">Booked Tutors</h1>
           <div className="flex flex-col gap-5">
             {myBookedTutor.map((tutor) => (
-              <MyBookedTutorCard key={tutor._id} tutor={tutor} user={user} />
+              <MyBookedTutorCard
+                key={tutor._id}
+                tutor={tutor}
+                user={user}
+                handleDelete={handleDelete}
+              />
             ))}
           </div>
         </div>

@@ -14,14 +14,13 @@ import Loading from "../components/Loading";
 const BecomeTutorForm = ({ tutor }) => {
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
-  const [isSubmitted, setIsSubmitted] = useState(false);
   // console.log(tutor);
   // const location = useLocation();
   // console.log(location.state?.tutor); // Check if tutor data exists
 
   // Initialize form data with location data from state if available
   const [formData, setFormData] = useState({
-    languages: tutor?.languages || [],
+    language: tutor?.language || [],
     experience: tutor?.experience || "",
     country: tutor?.country || "",
     location: tutor?.location || "", // Pre-fill location
@@ -81,13 +80,13 @@ const BecomeTutorForm = ({ tutor }) => {
       e.target.selectedOptions,
       (option) => option.value
     );
-    setFormData({ ...formData, languages: selectedLanguages });
+    setFormData({ ...formData, language: selectedLanguages });
   };
 
   const validateForm = () => {
     let newErrors = {};
-    if (!formData.languages.length)
-      newErrors.languages = "At least one language is required.";
+    if (!formData.language.length)
+      newErrors.language = "At least one language is required.";
     if (!formData.experience) newErrors.experience = "Experience is required.";
     if (!formData.country) newErrors.country = "Country selection is required.";
     if (!formData.age) newErrors.age = "Age is required.";
@@ -99,55 +98,96 @@ const BecomeTutorForm = ({ tutor }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const isValidUrl = (string) => {
+    try {
+      return Boolean(new URL(string)); // If valid, it won't throw
+    } catch (_) {
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    const imageUrl = user?.photoURL || ""; // Fallback to empty string
+
+    if (!isValidUrl(imageUrl)) {
+      console.error("Invalid image URL:", imageUrl);
+      Swal.fire({
+        title: "Invalid Image URL",
+        text: "Your profile picture URL is not valid. Please update it.",
+        icon: "error",
+      });
+      return;
+    }
+
     const tutorData = {
       name: user?.displayName,
       email: user?.email,
-      imageUrl: user?.photoURL,
+      imageUrl, // Ensure valid image URL
       ...formData,
       isTutor: false,
     };
-    // console.log(tutorData);
-    const { isPending, error, data, refetch } = useQuery({
-      queryKey: ["becomeTutorForm"],
-      queryFn: async () => {
-        const response = await axiosPublic.post("/tutors", tutorData);
 
-        console.log(response);
-        if (response.status === 200) {
-          Swal.fire({
-            title: "Your Application Has been Submitted!",
-            text: "Congratulations, your tutorial has been added!",
-            icon: "success",
-          });
-          refetch();
-          setFormData({});
-          setIsSubmitted(true);
-        }
-      },
-    });
+    try {
+      const response = await axiosPublic.post("/tutors", tutorData);
+      // console.log(response);
+
+      if (response.status === 200) {
+        Swal.fire({
+          title: "Your Application Has been Submitted!",
+          text: "Congratulations, your tutorial has been added!",
+          icon: "success",
+        });
+        refetch();
+        setFormData({});
+      }
+    } catch (error) {
+      console.error("Error submitting tutor form:", error);
+      Swal.fire({
+        title: "Submission Failed",
+        text: "There was an issue submitting your application. Please try again.",
+        icon: "error",
+      });
+    }
   };
 
-  const { isPending, isLoading, error, data, refetch } = useQuery({
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: isSubmitted = false,
+    refetch,
+  } = useQuery({
     queryKey: ["isSubmittedForm"],
     queryFn: async () => {
-      const response = await axiosPublic.get("/tutors");
+      console.log(user.email);
+      const response = await axiosPublic.get(`/tutors/email/${user.email}`);
 
-      console.log(response);
-      if (response.status === 200) {
-        setIsSubmitted(true);
+      // console.log(response.data);
+      if (response.data?.email) {
+        // refetch();
+        // console.log(response);
+        return true;
       }
     },
   });
+
   if (isLoading) return <Loading />;
   // verify that is tutor
-  if (isSubmitted)
+  if (isSubmitted && !tutor)
     return (
       <div className="flex justify-center items-center w-full h-screen text-center">
-        <h1>Your Application has been submitted. Please Wait for Response</h1>
+        <h1>
+          Your Application has been submitted. Please Wait for Response{" "}
+          {/* <span
+            onClick={handleSubmitAnother}
+            className="font-bold text-blue-600 underline cursor-pointer"
+          >
+            Submit Another Applicaiton?
+          </span> */}
+        </h1>
       </div>
     );
   return (
@@ -189,8 +229,7 @@ const BecomeTutorForm = ({ tutor }) => {
             <FaStar className="ml-1 text-red-500 text-xs" />
           </label>
           <select
-            multiple
-            name="languages"
+            name="language"
             onChange={handleMultiSelect}
             className="p-2 border rounded-lg w-full"
             value={formData.languages}
@@ -201,8 +240,8 @@ const BecomeTutorForm = ({ tutor }) => {
               </option>
             ))}
           </select>
-          {errors.languages && (
-            <p className="text-red-500 text-sm">{errors.languages}</p>
+          {errors.language && (
+            <p className="text-red-500 text-sm">{errors.language}</p>
           )}
         </div>
 
@@ -317,7 +356,7 @@ const BecomeTutorForm = ({ tutor }) => {
           type="submit"
           className="bg-blue-500 hover:bg-blue-600 py-2 rounded-lg w-full text-white"
         >
-          Submit Application
+          {tutor ? "Update" : "Submit"} Application
         </button>
       </form>
     </div>

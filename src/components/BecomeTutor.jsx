@@ -30,7 +30,7 @@ const BecomeTutor = () => {
           </ul>
           <div className="flex sm:flex-row flex-col sm:items-center sm:space-x-4 space-y-4 sm:space-y-0">
             <Link
-              to={"/addTutorials"}
+              to={"/become-tutor"}
               className="bg-black hover:bg-gray-800 shadow px-6 py-3 rounded-lg text-white"
             >
               Become a tutor →

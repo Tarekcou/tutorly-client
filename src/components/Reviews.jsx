@@ -5,45 +5,64 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { FaStar } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 // Sample Reviews Data
-const reviews = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    rating: 5,
-    review:
-      "The tutor was amazing! Helped me improve my French in just a few weeks.",
-    image:
-      "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
-  },
-  {
-    id: 2,
-    name: "Michael Smith",
-    rating: 4,
-    review: "Very helpful and patient. I learned a lot in a short time.",
-    image:
-      "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  },
-  {
-    id: 3,
-    name: "Sophia Lee",
-    rating: 5,
-    review: "Great teaching style! Highly recommended for beginners.",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToonwNT4zbwCyq-k-qAzXexPn6URz3gT4BxQ&s",
-  },
-  {
-    id: 4,
-    name: "David Brown",
-    rating: 4.5,
-    review: "Professional and friendly tutor. Enjoyed every lesson!",
-    image:
-      "https://image.shutterstock.com/image-photo/young-brazilian-man-isolated-on-260nw-2242569333.jpg",
-  },
-];
+// const reviews = [
+//   {
+//     id: 1,
+//     name: "Alice Johnson",
+//     rating: 5,
+//     review:
+//       "The tutor was amazing! Helped me improve my French in just a few weeks.",
+//     image:
+//       "https://t4.ftcdn.net/jpg/02/14/74/61/360_F_214746128_31JkeaP6rU0NzzzdFC4khGkmqc8noe6h.jpg",
+//   },
+//   {
+//     id: 2,
+//     name: "Michael Smith",
+//     rating: 4,
+//     review: "Very helpful and patient. I learned a lot in a short time.",
+//     image:
+//       "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+//   },
+//   {
+//     id: 3,
+//     name: "Sophia Lee",
+//     rating: 5,
+//     review: "Great teaching style! Highly recommended for beginners.",
+//     image:
+//       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToonwNT4zbwCyq-k-qAzXexPn6URz3gT4BxQ&s",
+//   },
+//   {
+//     id: 4,
+//     name: "David Brown",
+//     rating: 4.5,
+//     review: "Professional and friendly tutor. Enjoyed every lesson!",
+//     image:
+//       "https://image.shutterstock.com/image-photo/young-brazilian-man-isolated-on-260nw-2242569333.jpg",
+//   },
+// ];
 
 const Reviews = () => {
+  const axiosPublic = useAxiosPublic();
+  const {
+    isPending,
+    isLoading,
+    error,
+    data: reviews = [],
+    refetch,
+  } = useQuery({
+    queryKey: ["AllReviews"], // Ensures query updates when email changes
+    queryFn: async () => {
+      // if (!user?.email) return []; // Avoid running query when user is undefined
+      const response = await axiosPublic.get(`/review`);
+      // console.log(response.data);
+      return response?.data || [];
+    },
+  });
+  if (reviews.length === 0) return null;
   return (
     <div className="mx-auto py-12 w-11/12 md:w-10/12">
       <h2 className="mb-8 font-bold text-3xl text-center">
@@ -61,7 +80,7 @@ const Reviews = () => {
       >
         {reviews.map((review) => (
           <SwiperSlide
-            key={review.id}
+            key={review._id}
             className="flex md:flex-row flex-col items-center gap-6 shadow-lg p-2 rounded-xl"
           >
             <div className="flex md:flex-row flex-col items-center py-10 rounded-xl">
@@ -79,7 +98,7 @@ const Reviews = () => {
               <div className="p-5 w-full md:w-2/3 md:text-left text-center">
                 <h3 className="font-semibold text-lg">{review.name}</h3>
                 <div className="flex justify-center md:justify-start mb-3">
-                  {[...Array(Math.floor(review.rating))].map((_, i) => (
+                  {[...Array(Math.floor(review.review.rating))].map((_, i) => (
                     <FaStar key={i} className="text-yellow-500" />
                   ))}
                   {review.rating % 1 !== 0 && (
@@ -87,7 +106,7 @@ const Reviews = () => {
                   )}
                 </div>
                 <p className="text-gray-600 text-lg italic">
-                  "{review.review}"
+                  "{review.review.message}"
                 </p>
               </div>
             </div>

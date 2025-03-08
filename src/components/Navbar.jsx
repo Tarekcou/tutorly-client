@@ -29,9 +29,10 @@ const Navbar = () => {
   } = useQuery({
     queryKey: ["tutor"],
     queryFn: async () => {
-      const response = await axiosPublic.get(`/tutors/${user?.email}`);
-      refetch();
-      return response.data.isTutor;
+      const response = await axiosPublic.get(`/tutors/email/${user?.email}`);
+      // refetch();
+      // console.log(response);
+      return response?.data.isTutor || null;
     },
   });
 
@@ -39,8 +40,9 @@ const Navbar = () => {
     queryKey: ["admin"],
     queryFn: async () => {
       const response = await axiosPublic.get(`/users/${user?.email}`);
-      refetch();
-      return response.data.isTutor;
+      // console.log(response);
+      // refetch();
+      return response?.data.isAdmin || null;
     },
   });
   const handleToggle = (e) => {
@@ -53,7 +55,7 @@ const Navbar = () => {
 
   useEffect(() => {
     // (cart);
-
+    refetch();
     localStorage.setItem("theme", theme);
     const localtheme = localStorage.getItem("theme");
     document.querySelector("html").setAttribute("data-theme", localtheme);
@@ -64,7 +66,7 @@ const Navbar = () => {
   };
 
   const signInSignOutToggle = (
-    <>
+    <div className="flex items-center">
       {user ? (
         <div className="flex justify-between items-center gap-2 w-full">
           <div
@@ -120,7 +122,15 @@ const Navbar = () => {
           </NavLink>
         </div>
       )}
-    </>
+      <div className="form-control">
+        <label className="cursor-pointer label">
+          <span className="mx-1 text-blue-400 label-text">
+            {theme == "light" ? "Light " : "Dark "}
+          </span>
+          <input onChange={handleToggle} type="checkbox" className="toggle" />
+        </label>
+      </div>
+    </div>
   );
   const navMenu = (
     <div className="flex lg:flex-row flex-col justify-center gap-2 text-white">
@@ -186,18 +196,20 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-none mx-auto my-2 w-11/12 md:w-10/12 absolue">
+      <div className="flex justify-between items-center bg-none mx-auto my-4 md:my-2 w-11/12 md:w-10/12">
         {/* left side */}
-        <div className="flex justify-center items-center">
+        <div className="flex justify-between items-center w-full md:w-auto">
+          <Link
+            to={"/"}
+            className="flex items-center gap-1 font-bold text-orange-500 text-2xl"
+          >
+            <img className="rounded-full w-6 h-6" src={logo} /> Tutorly
+          </Link>
           <div className="lg:!hidden block dropdown">
-            <div
-              tabIndex={0}
-              role="button"
-              className="text-orange-500 btn btn-ghost"
-            >
+            <div tabIndex={0} role="button" className="text-orange-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5"
+                className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -212,18 +224,12 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="z-100 bg-base-100 shadow mt-3 p-2 rounded-box w-52 dropdown-content menu menu-sm"
+              className="right-2 z-100 absolute bg-base-100 shadow mt-3 rounded-box min-w-52 dropdown-content menu-content"
             >
               {navMenu}
               {signInSignOutToggle}
             </ul>
           </div>
-          <Link
-            to={"/"}
-            className="flex items-center gap-1 font-bold text-orange-500 text-2xl"
-          >
-            <img className="rounded-full w-6 h-6" src={logo} /> Tutorly
-          </Link>
         </div>
         {/* middle area */}
 
@@ -239,18 +245,6 @@ const Navbar = () => {
             </p>
             <FaCartPlus className="text-green-500 text-3xl" />
           </Link> */}
-          <div className="form-control">
-            <label className="cursor-pointer label">
-              <span className="mx-1 text-blue-400 label-text">
-                {theme == "light" ? "Light " : "Dark "}
-              </span>
-              <input
-                onChange={handleToggle}
-                type="checkbox"
-                className="toggle"
-              />
-            </label>
-          </div>
         </div>
       </div>
     </>

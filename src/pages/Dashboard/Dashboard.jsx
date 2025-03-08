@@ -9,6 +9,7 @@ import {
   FaUsers,
   FaUserAlt,
   FaUserAltSlash,
+  FaDashcube,
 } from "react-icons/fa";
 import AddTutorials from "./AddTutorials";
 import MyTutorials from "./MyTutorials";
@@ -17,9 +18,11 @@ import ManageTutors from "./ManageTutors";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { AuthContext } from "../../provider/AuthProvider";
 import ManageUsers from "./ManageUsers";
+import UploadTutorial from "./UploadTutorial";
+import DashboardChart from "./DashboardChart";
 
 const Dashboard = () => {
-  const [activePage, setActivePage] = useState("addTutorial");
+  const [activePage, setActivePage] = useState("dashboardChart");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
@@ -32,6 +35,15 @@ const Dashboard = () => {
   }, []);
   const dashboardMenu = (
     <>
+      <button
+        onClick={() => setActivePage("dashboardChart")}
+        className={`flex items-center space-x-2 p-3 rounded-lg ${
+          activePage === "dashboardChart" ? "bg-blue-500" : "hover:bg-gray-700"
+        }`}
+      >
+        <FaDashcube />
+        <span>Dashboard</span>
+      </button>
       <button
         onClick={() => setActivePage("addTutorial")}
         className={`flex items-center space-x-2 p-3 rounded-lg ${
@@ -58,7 +70,7 @@ const Dashboard = () => {
           }`}
         >
           <FaUser />
-          <span>Profile</span>
+          <span>Tutors Profile</span>
         </button>
       )}
       {/* New Manage Users Button */}
@@ -133,7 +145,8 @@ const Dashboard = () => {
 
       {/* Main Content (Scrollable) */}
       <div className="flex-1 bg-gray-100 md:ml-64 md:p-8 h-screen overflow-y-auto">
-        {activePage === "addTutorial" && <AddTutorials />}
+        {activePage === "dashboardChart" && <DashboardChart />}
+        {activePage === "addTutorial" && <UploadTutorial />}
         {activePage === "myTutorials" && <MyTutorials />}
         {activePage === "profile" && <Profile />}
         {activePage === "manageTutors" && <ManageTutors />}{" "}

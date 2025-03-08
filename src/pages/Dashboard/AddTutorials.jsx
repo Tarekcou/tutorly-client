@@ -117,7 +117,7 @@ const AddTutorials = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gradient-to-br from-slate-100 to-slate-200 mx-auto mt-10 py-10 min-h-screen">
+    <div className="flex justify-center items-center bg-gradient-to-br from-slate-100 to-slate-200 mx-auto min-h-screen">
       <div className="bg-white shadow-lg p-8 rounded-lg w-11/12 md:w-10/12">
         <h1 className="mb-6 font-bold text-gray-800 text-3xl text-center">
           Add Your Tutorial

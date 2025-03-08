@@ -14,8 +14,8 @@ const Profile = () => {
   const axiosPublic = useAxiosPublic();
   useEffect(() => {
     try {
-      axiosPublic.get(`/tutors/${user.email}`).then((res) => {
-        console.log(res.data);
+      axiosPublic.get(`/tutors/email/${user.email}`).then((res) => {
+        // console.log(res.data);
         if (res.status === 200) {
           setTutor(res.data);
         }
@@ -36,12 +36,12 @@ const Profile = () => {
       {showBecomeTutorPage ? (
         <BecomeTutorForm tutor={tutor} />
       ) : (
-        <div className="bg-white shadow-md mx-auto p-6 rounded-lg w-full max-w-lg text-center">
+        <div className="shadow-md mx-auto p-6 rounded-lg w-full h-full text-center">
           {/* User Photo */}
           <img
             src={tutor.imageUrl}
             alt={tutor.name}
-            className="mx-auto border-4 border-blue-500 rounded-full w-24 h-24"
+            className="mx-auto border-4 border-blue-500 rounded-full w-36 md:w-64 h-36 md:h-64"
           />
 
           {/* Name */}
@@ -50,7 +50,7 @@ const Profile = () => {
 
           {/* Display Profile Info */}
           <p className="mt-2 text-gray-700">
-            <strong>Location:</strong> {tutor.city}, {tutor.country}
+            <strong>Location:</strong> {tutor?.city}, {tutor.country}
           </p>
           <p className="text-gray-700">
             <strong>Experience:</strong> {tutor.experience} years

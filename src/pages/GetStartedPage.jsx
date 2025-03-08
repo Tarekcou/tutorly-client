@@ -34,12 +34,9 @@ const GetStartedPage = () => {
   };
   // console.log(location);
   return (
-    <div
-      className="flex justify-center items-center gap-10 space-y-5 mx-auto min-h-screen"
-      data-theme="light"
-    >
+    <div className="flex md:flex-row flex-col justify-center items-center gap-10 space-y-5 mx-auto mt-20 md:mt-0 w-11/12 md:w-10/12 min-h-screen">
       <div className="space-y-3">
-        <h1 className="text-5xl">Find the right tutor for you</h1>
+        <h1 className="text-3xl md:text-5xl">Find the right tutor for you</h1>
         <p>
           Tell us how you’d like to learn to get a personalized choice of tutors
         </p>
