@@ -20,7 +20,7 @@ const TutorDetailsPage = () => {
   const axiosPublic = useAxiosPublic();
   useEffect(() => {
     axiosPublic
-      .get(`/tutorials/email/${tutor.email}`)
+      .get(`/tutorials/email/${tutor?.email}`)
       .then((response) => setTutorials(response.data));
   }, []);
   const handleBooked = () => {
@@ -67,10 +67,10 @@ const TutorDetailsPage = () => {
     data: reviews = [],
     refetch,
   } = useQuery({
-    queryKey: ["Reviews", tutor.email], // Ensures query updates when email changes
+    queryKey: ["Reviews", tutor?.email], // Ensures query updates when email changes
     queryFn: async () => {
       // if (!user?.email) return []; // Avoid running query when user is undefined
-      const response = await axiosPublic.get(`/review/${tutor.email}`);
+      const response = await axiosPublic.get(`/review/${tutor?.email}`);
       // console.log(response.data);
       return response?.data || [];
     },

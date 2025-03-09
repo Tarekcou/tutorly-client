@@ -183,13 +183,13 @@ const LogInPage = () => {
           <div className="flex justify-center gap-4 my-4">
             <button
               onClick={fillAdminCredentials}
-              className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-white"
+              className="text-white btn btn-sm btn-primary"
             >
               Admin Credential
             </button>
             <button
               onClick={fillTutorCredentials}
-              className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white"
+              className="bg-green-500 border-none text-white btn-sm btn btn-secondary"
             >
               Tutor Credential
             </button>
