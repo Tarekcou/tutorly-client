@@ -190,7 +190,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-none mx-auto my-6 md:my-4 w-11/12 md:w-10/12">
+      <div className="flex justify-between items-center bg-none mx-auto p-1 py-3 w-11/12 md:w-10/12">
         {/* left side */}
         <div className="flex justify-between items-center w-full md:w-auto">
           <Link
@@ -218,7 +218,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="right-2 z-100 absolute bg-base-100 shadow mt-3 p-3 rounded-box min-w-52 dropdown-content menu-content"
+              className="right-2 z-100 absolute bg-base-100 shadow rounded-box min-w-52 dropdown-content menu-content"
             >
               {navMenu}
               {signInSignOutToggle}
