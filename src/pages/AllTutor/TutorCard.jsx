@@ -65,7 +65,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
       >
         <div
           onClick={() => navigate(`/tutor/details`, { state: { tutor } })}
-          className={`group relative flex md:flex-row flex-col items-center gap-3  shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-9/12 cursor-pointer ${
+          className={`group relative flex md:flex-row flex-col items-center gap-3  shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-10/12 cursor-pointer ${
             user?.email === tutor?.email ? "bg-green-100" : "bg-white"
           }`}
         >
@@ -83,8 +83,9 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
                 {tutor.country}
               </p>
               <p>Language: {tutor.language}</p>
-
-              <p className="mt-2 text-gray-700">{tutor.description}</p>
+              <p className="mt-2 text-gray-700">
+                {tutor.description.split(" ").slice(0, 15).join(" ")}...
+              </p>{" "}
             </div>
           </div>
           <div className="flex flex-row md:flex-col justify-between items-center gap-3 w-full md:w-4/12 text-center">
@@ -145,7 +146,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
           )} */}
         </div>
 
-        <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-white shadow-lg w-full md:w-3/12 h-full card">
+        <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-white shadow-lg w-full md:w-2/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"

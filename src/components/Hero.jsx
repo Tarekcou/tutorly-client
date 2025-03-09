@@ -16,7 +16,7 @@ const Hero = () => {
         </h1>
         <Link
           to={"/find-tutors"}
-          className="text-xl btn btn-neutral btn-sm md:btn-md"
+          className="bg-orange-500 hover:bg-orange-600 text-white text-xl btn btn-neutral btn-sm md:btn-md"
         >
           Get Started <FaArrowRight />
         </Link>

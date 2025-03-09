@@ -77,7 +77,7 @@ const MyBookedTutor = () => {
   return (
     <div className="">
       {isLoading ? (
-        <div className="">
+        <div className="min-h-screen">
           <Loading />
         </div>
       ) : (

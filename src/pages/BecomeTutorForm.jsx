@@ -191,8 +191,8 @@ const BecomeTutorForm = ({ tutor }) => {
       </div>
     );
   return (
-    <div className="bg-white shadow-lg mx-auto mt-16 p-8 rounded-lg max-w-3xl">
-      <h2 className="mb-6 font-bold text-2xl">Become a Tutor</h2>
+    <div className="bg-white shadow-lg mx-auto mt-20 p-2 md:p-8 rounded-lg w-11/12 md:w-10/12 max-w-3xl">
+      <h2 className="mb-6 font-bold text-3xl">Become a Tutor</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Readonly Fields */}
         <div>
@@ -354,7 +354,7 @@ const BecomeTutorForm = ({ tutor }) => {
 
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 py-2 rounded-lg w-full text-white"
+          className="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg focus:outline-none w-full text-white"
         >
           {tutor ? "Update" : "Submit"} Application
         </button>
