@@ -98,7 +98,7 @@ const MyTutorials = () => {
             <thead>
               <tr className="bg-gray-100">
                 <th className="px-4 py-2 border border-gray-300">Name</th>
-                <th className="px-4 py-2 border border-gray-300">Image</th>
+                <th className="px-4 py-2 border border-gray-300">Video</th>
                 <th className="px-4 py-2 border border-gray-300">Language</th>
                 <th className="px-4 py-2 border border-gray-300">Price</th>
                 <th className="px-4 py-2 border border-gray-300">
@@ -119,7 +119,7 @@ const MyTutorials = () => {
                         <strong>Video Preview:</strong>
                       </p>
                       <iframe
-                        className="mt-2 border rounded w-full h-64"
+                        className="mt-2 border rounded w-64 h-64"
                         src={`https://www.youtube.com/embed/${extractYouTubeId(
                           tutorial.videoUrl
                         )}`}

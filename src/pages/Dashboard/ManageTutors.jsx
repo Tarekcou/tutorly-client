@@ -57,7 +57,7 @@ const ManageTutors = () => {
       <div className="overflow-x-auto">
         <table className="border border-gray-300 w-full table-auto">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="">
               <th className="px-4 py-2 border">Image</th>
               <th className="px-4 py-2 border">Name</th>
               <th className="px-4 py-2 border">Email</th>

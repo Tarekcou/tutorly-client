@@ -14,9 +14,6 @@ import Loading from "../components/Loading";
 const BecomeTutorForm = ({ tutor }) => {
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
-  // console.log(tutor);
-  // const location = useLocation();
-  // console.log(location.state?.tutor); // Check if tutor data exists
 
   // Initialize form data with location data from state if available
   const [formData, setFormData] = useState({
@@ -131,8 +128,15 @@ const BecomeTutorForm = ({ tutor }) => {
     };
 
     try {
-      const response = await axiosPublic.post("/tutors", tutorData);
-      // console.log(response);
+      let response;
+      if (tutor)
+        response = await axiosPublic.put(
+          `/tutors/profileUpdate/${tutor._id}`,
+          tutorData
+        );
+      // If tutor is not provided, create a new one
+      else response = await axiosPublic.post("/tutors", tutorData);
+      console.log(response);
 
       if (response.status === 200) {
         Swal.fire({
@@ -162,7 +166,7 @@ const BecomeTutorForm = ({ tutor }) => {
   } = useQuery({
     queryKey: ["isSubmittedForm"],
     queryFn: async () => {
-      console.log(user.email);
+      // console.log(user.email);
       const response = await axiosPublic.get(`/tutors/email/${user.email}`);
 
       // console.log(response.data);
@@ -191,7 +195,11 @@ const BecomeTutorForm = ({ tutor }) => {
       </div>
     );
   return (
-    <div className="shadow-lg mx-auto mt-20 p-2 md:p-8 rounded-lg w-11/12 md:w-10/12 max-w-3xl">
+    <div
+      className={`shadow-lg mx-auto ${
+        tutor ? "mt-5" : "mt-20"
+      }  p-2 md:p-8 rounded-lg w-11/12 md:w-10/12 max-w-3xl`}
+    >
       <h2 className="mb-6 font-bold text-3xl">Become a Tutor</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Readonly Fields */}
@@ -232,8 +240,11 @@ const BecomeTutorForm = ({ tutor }) => {
             name="language"
             onChange={handleMultiSelect}
             className="p-2 border rounded-lg w-full"
-            value={formData.languages}
+            value={formData.language}
           >
+            <option key={"Select a language"} value={"Select a language"}>
+              Select a language
+            </option>
             {languagesList.map((lang) => (
               <option key={lang} value={lang}>
                 {lang}

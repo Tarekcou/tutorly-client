@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import { FaMailchimp } from "react-icons/fa";
+import { CiMail } from "react-icons/ci";
 
 const TutorCard = ({ tutor, user, handleDelete }) => {
   const navigate = useNavigate();
@@ -76,13 +78,17 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
               className="rounded-full w-32 h-32"
             />
             <div className="p-4">
-              <h3 className="font-bold text-xl">{user?.displayName}</h3>
-              <h3 className="text-black text-base">{user?.language}</h3>
+              <h3 className="font-bold text-xl">{tutor?.name}</h3>
+              <h3 className="flex gap-1 text-black text-base">
+                <CiMail /> {tutor?.email}
+              </h3>
               <p className="flex items-center gap-1 text-gray-600 text-base">
                 <FaLocationDot />
                 {tutor.country}
               </p>
-              <p className="text-blue-500">Language: {tutor.language}</p>
+              <p className="font-bold text-blue-500">
+                Language: {tutor.language}
+              </p>
               <p className="mt-2 text-gray-700">
                 {tutor.description.split(" ").slice(0, 12).join(" ")}...
               </p>{" "}
@@ -146,7 +152,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
           )} */}
         </div>
 
-        <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-gray-400 shadow-lg w-full md:w-2/12 h-full card">
+        <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-gray-100 shadow-lg w-full md:w-2/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"

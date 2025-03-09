@@ -36,7 +36,7 @@ const Profile = () => {
       {showBecomeTutorPage ? (
         <BecomeTutorForm tutor={tutor} />
       ) : (
-        <div className="shadow-md mx-auto p-6 rounded-lg w-full h-full text-center">
+        <div className="mx-auto mb-20 p-10 rounded-lg w-full h-full text-center">
           {/* User Photo */}
           <img
             src={tutor.imageUrl}
@@ -55,8 +55,8 @@ const Profile = () => {
           <p className="text-gray-700">
             <strong>Experience:</strong> {tutor.experience} years
           </p>
-          <p className="text-gray-700">
-            <strong>Languages:</strong> {tutor?.languages?.join(", ")}
+          <p className="font-bold text-green-700 text-xl">
+            <strong>Languages:</strong> {tutor?.language}
           </p>
           <p className="text-gray-700">
             <strong>Age:</strong> {tutor.age}
@@ -65,7 +65,7 @@ const Profile = () => {
 
           {/* Edit Button */}
           <button
-            className="bg-blue-500 hover:bg-blue-600 mt-4 px-4 py-2 rounded-lg text-white"
+            className="bg-blue-500 hover:bg-blue-600 my-5 text-white btn"
             onClick={handleEditClick}
           >
             Edit Profile

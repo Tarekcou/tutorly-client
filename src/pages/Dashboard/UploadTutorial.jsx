@@ -4,6 +4,7 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 const countries = [
   "United States",
+  "Bangladesh",
   "India",
   "Canada",
   "United Kingdom",
@@ -146,14 +147,22 @@ export default function UploadTutorial({ updateTutorial }) {
         </div>
         <div>
           <label className="block font-medium text-gray-700">Language</label>
-          <input
-            type="text"
+          <select
             name="language"
             value={tutorial.language}
             onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded w-full"
+            className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
             required
-          />
+          >
+            <option value="" disabled>
+              Select a Language
+            </option>
+            {languages.map((language, index) => (
+              <option key={index} value={language}>
+                {language}
+              </option>
+            ))}
+          </select>
         </div>
         {/* Country Select */}
         <div className="mb-4">
@@ -171,26 +180,6 @@ export default function UploadTutorial({ updateTutorial }) {
             {countries.map((country, index) => (
               <option key={index} value={country}>
                 {country}
-              </option>
-            ))}
-          </select>
-        </div>
-        {/* Language Dropdown */}
-        <div className="mb-4">
-          <label className="block font-semibold text-gray-700">Language</label>
-          <select
-            name="language"
-            value={tutorial.language}
-            onChange={handleChange}
-            className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-            required
-          >
-            <option value="" disabled>
-              Select a language
-            </option>
-            {languages.map((lang, index) => (
-              <option key={index} value={lang}>
-                {lang}
               </option>
             ))}
           </select>

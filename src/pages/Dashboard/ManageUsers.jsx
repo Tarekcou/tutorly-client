@@ -62,24 +62,24 @@ const ManageUsers = () => {
       <div className="overflow-x-auto">
         <table className="border border-gray-300 w-full table-auto">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="">
               <th className="px-4 py-2 border">Image</th>
               <th className="px-4 py-2 border">Name</th>
               <th className="px-4 py-2 border">Email</th>
-              <th className="px-4 py-2 border">Languages</th>
               <th className="px-4 py-2 border">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user, index) => (
               <tr key={user._id} className="text-center">
-                <td className="px-4 py-2 border">
+                <td>{index + 1}</td>
+                {/* <td className="px-4 py-2 border">
                   <img
                     src={user.imageUrl || "https://via.placeholder.com/50"}
                     alt={user.name}
                     className="mx-auto rounded-full w-12 h-12"
                   />
-                </td>
+                </td> */}
                 <td className="px-4 py-2 border">{user.name}</td>
                 <td className="px-4 py-2 border">{user.email}</td>
 
