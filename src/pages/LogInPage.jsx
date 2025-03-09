@@ -31,7 +31,7 @@ const LogInPage = () => {
     signedIn(email, password)
       .then((userCredential) => {
         Swal.fire({
-          title: "Sign up successful",
+          title: "Login successful",
           text: "Congratulations",
           icon: "success",
         });

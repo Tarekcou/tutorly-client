@@ -85,29 +85,11 @@ const AuthProvider = ({ children }) => {
     name = "James",
     Url = "https://cdn-icons-png.flaticon.com/512/7084/7084424.png"
   ) => {
-    setLoading(true);
-    // (name, Url);
-
-    toast.loading("profile updating..");
-
-    updateProfile(auth.currentUser, {
+    setLoading(false);
+    return updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: Url,
-    })
-      .then((e) => {
-        // Profile updated!
-        "profile", e;
-        // ...
-        toast.success("profile updated");
-
-        setLoading(false);
-      })
-      .catch((error) => {
-        // An error occurred
-        toast.error("Something went wrong" + error);
-
-        // ...
-      });
+    });
   };
   const passwordReset = (resetEmail) => {
     return sendPasswordResetEmail(auth, resetEmail);
@@ -118,38 +100,7 @@ const AuthProvider = ({ children }) => {
       setLoading(true);
       if (user) {
         setUser(user);
-        // console.log("user", user);
-        const uid = user.uid;
-        // (user)
-        //   if (user?.email) {
-        //     const currentUser = { email: user.email };
-        //     console.log(currentUser);
-        //     axios
-        //       .post("https://tutor-booking-server-olive.vercel.app/jwt", currentUser, {
-        //         withCredential: true,
-        //       })
-        //       .then((res) => {
-        //         console.log("login", res.data);
-        //         setLoading(false);
-        //       });
-        //   } else {
-        //     axios
-        //       .post(
-        //         "https://tutor-booking-server-olive.vercel.app/logout",
-        //         {},
-        //         {
-        //           withCredential: true,
-        //         }
-        //       )
-        //       .then((res) => {
-        //         console.log("logout", res.data);
-        //         setLoading(false);
-        //       });
-        //   }
-        //   setimageKey((pre) => pre + 1);
-        // } else {
-        //   setLoading(false);
-        // }
+
         setLoading(false);
       }
       setLoading(false);

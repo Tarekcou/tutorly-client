@@ -25,14 +25,14 @@ const TutorDetailsPage = () => {
   }, []);
   const handleBooked = () => {
     const bookedTutor = {
-      tutorId: tutor._id,
-      image: tutor.imageUrl,
-      language: tutor.language,
-      price: tutor.price,
-      country: tutor.country,
-      review: tutor.review,
-      tutorEmail: tutor.email,
-      email: user.email,
+      tutorId: tutor?._id,
+      image: tutor?.imageUrl,
+      language: tutor?.language,
+      price: tutor?.price,
+      country: tutor?.country,
+      review: tutor?.review,
+      tutorEmail: tutor?.email,
+      email: user?.email,
       // Assuming user ID is stored in a global state
     };
     axiosPublic.post("/add-booked-tutorials", bookedTutor).then((res) => {
@@ -79,11 +79,11 @@ const TutorDetailsPage = () => {
     console.log("Submitted Review:", review);
     // Here you can send the review to your API
     const reviewData = {
-      name: user.displayName,
-      reviewerEmail: user.email,
+      name: user?.displayName,
+      reviewerEmail: user?.email,
       image: user?.photoURL,
       review: review,
-      tutorEmail: tutor.email,
+      tutorEmail: tutor?.email,
     };
     axiosPublic.post("/review", reviewData).then((res) => {
       // console.log(res);

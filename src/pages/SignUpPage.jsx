@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../provider/AuthProvider";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { FaEyeSlash, FaGoogle } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,6 +16,8 @@ const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [photoUrl, setPhotoUrl] = useState("");
   const axiosPublic = useAxiosPublic();
+  const location = useLocation(); // ✅ Get location object
+
   const {
     isLoading,
     setLoading,
@@ -60,10 +62,9 @@ const SignUpPage = () => {
 
     registerWithEmail(email, password)
       .then((userCredential) => {
-        toast("Register is processing..");
+        // toast("Register is processing..");
         // Signed up
         const user = userCredential.user;
-
         setLoading(false);
         setUser(user);
 
@@ -73,17 +74,18 @@ const SignUpPage = () => {
             email,
             isAdmin: false,
           };
-          // console.log(userInfo);
           axiosPublic.post("/users", userInfo).then((res) => {
-            console.log(res);
-            Swal.fire({
-              title: "Sign up successful",
-              text: "Congratulations",
-              icon: "success",
-            });
-            if (location?.state) navigate(location?.state);
-            else {
-              navigate("/");
+            if (res.status === 200) {
+              Swal.fire({
+                title: "Sign up successful",
+                text: "Congratulations",
+                icon: "success",
+              });
+              if (location.state) {
+                navigate(location.state);
+              } else {
+                navigate("/");
+              }
             }
           });
         });
@@ -104,44 +106,50 @@ const SignUpPage = () => {
   const handleGoogleLogin = () => {
     googleLogin()
       .then((result) => {
+        if (!result || !result.user) {
+          throw new Error("Google login failed. No user data found.");
+        }
+
         console.log(result);
         const userInfo = {
-          email: result.user?.email,
-          name: result.user?.displayName,
+          email: result.user.email || "No Email",
+          name: result.user.displayName || "No Name",
           isAdmin: false,
         };
+
         axiosPublic.post("/users", userInfo).then((res) => {
-          // console.log(res);
-          Swal.fire({
-            title: "Sign up successful",
-            text: "Congratulations",
-            icon: "success",
-          });
-          if (location?.state) navigate(location?.state);
-          else {
-            navigate("/");
+          if (res.status === 200) {
+            Swal.fire({
+              title: "Sign up successful",
+              text: "Congratulations",
+              icon: "success",
+            });
+            if (location?.state) navigate(location.state);
+            else navigate("/");
           }
         });
 
-        const user = result.user;
-        setUser(user);
-
+        setUser(result.user);
         setLoading(false);
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        console.error("Google login error:", error.message);
+        Swal.fire({
+          title: "Login Failed",
+          text: error.message,
+          icon: "error",
+        });
+        setLoading(false);
       });
   };
 
   return (
-    <div className="flex justify-center items-center bg-gray-100 min-h-screen">
+    <div className="flex justify-center items-center min-h-screen">
       {isLoading ? (
         <Loading />
       ) : (
         <>
-          <div className="bg-white shadow-lg mt-20 p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12">
+          <div className="shadow-lg mt-20 p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12">
             <h2 className="font-bold text-green-700 text-3xl text-center">
               Register
             </h2>
