@@ -6,13 +6,11 @@ const ContactPage = () => {
       {/* Top Section */}
       <div className="flex md:flex-row flex-col flex-grow">
         {/* Left: Contact Form */}
-        <div className="bg-gray-100 p-8 w-full lg:w-1/2">
+        <div className="p-8 w-full lg:w-1/2">
           <h2 className="mb-4 font-bold text-2xl">Contact Us</h2>
           <form className="space-y-4">
             <div>
-              <label className="block font-medium text-gray-700 text-sm">
-                Name
-              </label>
+              <label className="block font-medium text-sm">Name</label>
               <input
                 type="text"
                 placeholder="Enter your name"
@@ -20,9 +18,7 @@ const ContactPage = () => {
               />
             </div>
             <div>
-              <label className="block font-medium text-gray-700 text-sm">
-                Email
-              </label>
+              <label className="block font-medium text-sm">Email</label>
               <input
                 type="email"
                 placeholder="Enter your email"
@@ -30,9 +26,7 @@ const ContactPage = () => {
               />
             </div>
             <div>
-              <label className="block font-medium text-gray-700 text-sm">
-                Message
-              </label>
+              <label className="block font-medium text-sm">Message</label>
               <textarea
                 rows="4"
                 placeholder="Enter your message"

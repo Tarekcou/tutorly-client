@@ -84,7 +84,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
               </p>
               <p className="text-blue-500">Language: {tutor.language}</p>
               <p className="mt-2 text-gray-700">
-                {tutor.description.split(" ").slice(0, 15).join(" ")}...
+                {tutor.description.split(" ").slice(0, 12).join(" ")}...
               </p>{" "}
             </div>
           </div>

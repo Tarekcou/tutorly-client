@@ -191,7 +191,7 @@ const BecomeTutorForm = ({ tutor }) => {
       </div>
     );
   return (
-    <div className="bg-white shadow-lg mx-auto mt-20 p-2 md:p-8 rounded-lg w-11/12 md:w-10/12 max-w-3xl">
+    <div className="shadow-lg mx-auto mt-20 p-2 md:p-8 rounded-lg w-11/12 md:w-10/12 max-w-3xl">
       <h2 className="mb-6 font-bold text-3xl">Become a Tutor</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Readonly Fields */}

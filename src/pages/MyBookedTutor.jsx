@@ -41,7 +41,7 @@ const MyBookedTutor = () => {
 
   if (!myBookedTutor?.length) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-gray-700 text-center">
+      <div className="flex justify-center items-center min-h-screen text-center">
         You have not booked any tutors yet.
       </div>
     );
@@ -83,7 +83,7 @@ const MyBookedTutor = () => {
       ) : (
         <div className="mx-auto my-32 w-11/12 md:w-10/12">
           <h1 className="my-5 font-bold text-3xl text-center">Booked Tutors</h1>
-          <div className="flex flex-col gap-5">
+          <div className="gap-5 grid grid-cols-1 md:grid-cols-2">
             {myBookedTutor.map((tutor) => (
               <MyBookedTutorCard
                 key={tutor._id}
