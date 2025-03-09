@@ -17,7 +17,7 @@ const BecomeTutorForm = ({ tutor }) => {
 
   // Initialize form data with location data from state if available
   const [formData, setFormData] = useState({
-    language: tutor?.language || [],
+    language: tutor?.language || "",
     experience: tutor?.experience || "",
     country: tutor?.country || "",
     location: tutor?.location || "", // Pre-fill location

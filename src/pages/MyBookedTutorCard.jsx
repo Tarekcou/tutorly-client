@@ -71,7 +71,7 @@ const MyBookedtutorsCard = ({ tutor, user, handleDelete }) => {
             </p>
             <p>Language: {tutors.language}</p>
             <p className="font-bold text-pink-600">
-              ${tutors.price} / 50-min lesson
+              ${tutors.hourlyRate} / 50-min lesson
             </p>
 
             <p className="mt-2 text-gray-700">{tutors.description}</p>

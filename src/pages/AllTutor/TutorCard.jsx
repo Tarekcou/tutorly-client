@@ -20,7 +20,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
       tutorId: tutor._id,
       image: tutor.imageUrl,
       language: tutor.language,
-      price: tutor.price,
+      hourlyRate: tutor.hourlyRate,
       country: tutor.country,
       review: tutor.review,
       tutorEmail: tutor.email,
@@ -54,7 +54,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
     queryFn: async () => {
       // if (!user?.email) return []; // Avoid running query when user is undefined
       const response = await axiosPublic.get(`/review/${tutor.email}`);
-      console.log(response.data[0].review.rating);
+      // console.log(response.data[0].review.rating);
       return response?.data || [];
     },
   });
@@ -79,7 +79,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
             />
             <div className="p-4">
               <h3 className="font-bold text-xl">{tutor?.name}</h3>
-              <h3 className="flex gap-1 text-black text-base">
+              <h3 className="flex items-center gap-1 text-black text-base">
                 <CiMail /> {tutor?.email}
               </h3>
               <p className="flex items-center gap-1 text-gray-600 text-base">

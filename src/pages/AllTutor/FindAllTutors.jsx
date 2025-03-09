@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { FaLocationDot } from "react-icons/fa6";
-import { FaStar } from "react-icons/fa6";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { FaLocationDot, FaStar } from "react-icons/fa6";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 import TutorCard from "./TutorCard";
@@ -8,6 +7,7 @@ import Loading from "../../components/Loading";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+
 const countries = [
   "United States",
   "India",
@@ -54,67 +54,78 @@ const languages = [
   "Hebrew",
   "Danish",
 ];
+
 const FindAllTutors = () => {
   const { user } = useContext(AuthContext);
-  const [language, setLanguage] = useState("");
+  const axiosPublic = useAxiosPublic();
+  const { language: paramLanguage } = useParams(); // Get language from URL params
+
+  const [language, setLanguage] = useState(paramLanguage || ""); // Ensure initial state from params
   const [maxPrice, setMaxPrice] = useState(500);
   const [country, setCountry] = useState("");
   const [keyword, setKeyword] = useState("");
-  const lan = useParams();
-  // console.log(lan);
-  const axiosPublic = useAxiosPublic();
+
+  // Fetch tutors based on selected language
   const {
-    isPending,
     isLoading,
-    error,
     data: tutors = [],
     refetch,
   } = useQuery({
-    queryKey: ["FindTutors"], // Ensures query updates when email changes
+    queryKey: ["FindTutors", language], // Re-fetch when language changes
     queryFn: async () => {
       try {
-        let res;
-        if (lan?.language)
-          res = await axiosPublic.get(`/tutors/${lan.language}`);
-        else res = await axiosPublic.get("/tutors");
-
-        const data = await res.data;
-        // console.log(data);
-        return data;
+        const res = language
+          ? await axiosPublic.get(`/tutors/${language}`)
+          : await axiosPublic.get("/tutors");
+        // console.log(res.data);
+        return res.data;
       } catch (error) {
         console.error("Error fetching tutors:", error);
+        return [];
       }
     },
+    enabled: true, // Ensures query runs immediately
   });
 
-  const filteredTutors = tutors.filter((tutor) => {
-    const tutorPrice = parseInt(tutor.hourlyRate, 10);
-    return (
-      (language === "" ||
-        tutor.language.toLowerCase() === language.toLowerCase()) &&
-      (country === "" ||
-        tutor.country?.toLowerCase() === country.toLowerCase()) &&
-      !isNaN(tutorPrice) &&
-      tutorPrice <= parseInt(maxPrice, 10) &&
-      (keyword === "" ||
-        tutor.name.toLowerCase().includes(keyword.toLowerCase()) ||
-        tutor.country?.toLowerCase().includes(keyword.toLowerCase()) ||
-        tutor.language.includes(keyword.toLowerCase()))
-    );
-  });
-
-  const handleLanguageChange = async (language) => {
-    try {
-      setLanguage(language);
-      let res;
-
-      res = await axiosPublic.get(`/tutors/${language}`);
-
+  // Update tutors when language changes
+  useEffect(() => {
+    if (language) {
       refetch();
-    } catch (error) {
-      console.error("Error fetching tutors:", error);
     }
+  }, [language, refetch]);
+
+  // Filter tutors based on user selections
+  const filteredTutors = useMemo(() => {
+    return tutors.filter((tutor) => {
+      const tutorPrice = parseInt(tutor.hourlyRate, 10);
+      console.log(tutor);
+      return (
+        (language === "" ||
+          (tutor.language &&
+            typeof tutor.language === "string" &&
+            tutor.language.toLowerCase() === language.toLowerCase())) &&
+        (country === "" ||
+          (tutor.country &&
+            typeof tutor.country === "string" &&
+            tutor.country.toLowerCase() === country.toLowerCase())) &&
+        !isNaN(tutorPrice) &&
+        tutorPrice <= parseInt(maxPrice, 10) &&
+        (keyword === "" ||
+          tutor.name.toLowerCase().includes(keyword.toLowerCase()) ||
+          tutor.country.toLowerCase().includes(keyword.toLowerCase()) ||
+          tutor.language.toLowerCase().includes(keyword.toLowerCase()))
+      );
+    });
+  }, [tutors, language, country, maxPrice, keyword]); // Dependencies
+
+  console.log(filteredTutors);
+  // Handle language selection
+  const handleLanguageChange = (selectedLanguage) => {
+    setLanguage(selectedLanguage); // Update state first
+    // refetch(); // Explicitly refetch to ensure data update
   };
+
+  // Handle tutor deletion
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -126,23 +137,19 @@ const FindAllTutors = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const response = await axiosPublic
-          .delete(`/tutors/${id}`)
-          .then((response) => {
-            if (response.status === 200) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success",
-              });
-              refetch();
-            }
-          });
+        try {
+          const response = await axiosPublic.delete(`/tutors/${id}`);
+          if (response.status === 200) {
+            Swal.fire("Deleted!", "Your tutor has been deleted.", "success");
+            refetch(); // Refresh tutors after deletion
+          }
+        } catch (error) {
+          console.error("Error deleting tutor:", error);
+        }
       }
     });
   };
 
-  // console.log(filteredTutors);
   return (
     <div className="mx-auto my-5 mt-28 md:p-8 w-11/12 md:w-10/12 min-h-screen">
       {isLoading ? (
@@ -161,15 +168,10 @@ const FindAllTutors = () => {
               <label className="block">Language:</label>
               <select
                 value={language}
-                onChange={(e) => {
-                  lan.language
-                    ? handleLanguageChange(e.target.value)
-                    : setLanguage(e.target.value);
-                }}
+                onChange={(e) => handleLanguageChange(e.target.value)}
                 className="p-2 border rounded-lg w-full"
               >
-                <option value="">Select a Language</option>{" "}
-                {/* ✅ Added this line */}
+                <option value="">Select a Language</option>
                 {languages.map((lang, index) => (
                   <option key={index} value={lang}>
                     {lang}
@@ -218,6 +220,7 @@ const FindAllTutors = () => {
               />
             </div>
           </div>
+
           {tutors.length === 0 ? (
             <h2 className="mb-4 font-semibold text-xl">No tutors Available</h2>
           ) : (
@@ -226,17 +229,15 @@ const FindAllTutors = () => {
               <h2 className="mb-4 font-semibold text-xl">
                 {filteredTutors.length} tutor(s) match your needs
               </h2>
-              <div>
-                <div className="flex flex-col gap-5">
-                  {filteredTutors.map((tutor) => (
-                    <TutorCard
-                      key={tutor._id}
-                      tutor={tutor}
-                      user={user}
-                      handleDelete={handleDelete}
-                    />
-                  ))}
-                </div>
+              <div className="flex flex-col gap-5">
+                {filteredTutors.map((tutor) => (
+                  <TutorCard
+                    key={tutor._id}
+                    tutor={tutor}
+                    user={user}
+                    handleDelete={handleDelete}
+                  />
+                ))}
               </div>
             </>
           )}
