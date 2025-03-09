@@ -46,17 +46,17 @@ const Stats = ({ tutors = [] }) => {
       <div className="shadow w-full text-center lg:stats-horizontal stats stats-vertical">
         <div className="stat">
           <div className="text-2xl md:stat-value">{uniqueTutors.length}</div>
-          <div className="stat-desc">Experienced Tutors</div>
+          <div className="">Experienced Tutors</div>
         </div>
 
         <div className="stat">
           <div className="text-2xl md:stat-value">{reviews.length}</div>
-          <div className="stat-desc">5-star tutor reviews</div>
+          <div className="">5-star tutor reviews</div>
         </div>
 
         <div className="stat">
           <div className="text-2xl md:stat-value">{subject}+</div>
-          <div className="stat-desc">Subjects Taught</div>
+          <div className="">Subjects Taught</div>
         </div>
 
         <div className="stat">

@@ -112,13 +112,13 @@ const LogInPage = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="bg-white shadow-lg p-8 py-16 rounded-lg w-11/12 md:w-8/12 lg:w-6/12 h-full">
+        <div className="shadow-lg p-8 py-16 rounded-lg w-11/12 md:w-8/12 lg:w-6/12 h-full">
           <h2 className="font-bold text-green-600 text-3xl text-center">
             Login
           </h2>
           <form onSubmit={handleLogin} className="mt-6">
             <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700">
+              <label htmlFor="email" className="block">
                 Email
               </label>
               <input
@@ -127,12 +127,12 @@ const LogInPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
+                className="mt-2 px-4 py-2 border rounded-lg w-full"
               />
             </div>
 
             <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700">
+              <label htmlFor="password" className="block">
                 Password
               </label>
               <div className="relative">
@@ -142,12 +142,12 @@ const LogInPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
+                  className="mt-2 px-4 py-2 border rounded-lg focus:ring-blue-500 w-full"
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="top-2 right-3 absolute inset-y-0 flex items-center text-gray-600 hover:text-blue-500"
+                  className="top-2 right-3 absolute inset-y-0 flex items-center hover:text-blue-500"
                 >
                   {showPassword ? (
                     <span>
@@ -203,7 +203,7 @@ const LogInPage = () => {
           <button
             onClick={handleGoogleLogin}
             type="submit"
-            className="flex justify-center items-center gap-2 hover:bg-gray-100 my-2 px-4 py-2 rounded-lg btn-outline focus:outline-none w-full text-black hover:text-orange-500 cursor-pointer btn"
+            className="flex justify-center items-center gap-2 hover:bg-gray-100 my-2 px-4 py-2 rounded-lg btn-outline w-full hover:text-orange-500 cursor-pointer btn"
           >
             <FaGoogle className="text-blue-600" /> Continue with Google
           </button>

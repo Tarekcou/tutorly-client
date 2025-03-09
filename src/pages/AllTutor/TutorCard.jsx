@@ -66,7 +66,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
         <div
           onClick={() => navigate(`/tutor/details`, { state: { tutor } })}
           className={`group relative flex md:flex-row flex-col items-center gap-3  shadow-lg p-3 py-5 rounded-lg hover:ring-2 w-full md:w-10/12 cursor-pointer ${
-            user?.email === tutor?.email ? "bg-green-100" : "bg-white"
+            user?.email === tutor?.email ? "bg-green-100" : "bg-gray-100"
           }`}
         >
           <div className="flex md:flex-row flex-col items-center gap-3 md:w-8/12">
@@ -77,12 +77,12 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
             />
             <div className="p-4">
               <h3 className="font-bold text-xl">{user?.displayName}</h3>
-              <h3 className="text-base">{user?.language}</h3>
+              <h3 className="text-black text-base">{user?.language}</h3>
               <p className="flex items-center gap-1 text-gray-600 text-base">
                 <FaLocationDot />
                 {tutor.country}
               </p>
-              <p>Language: {tutor.language}</p>
+              <p className="text-blue-500">Language: {tutor.language}</p>
               <p className="mt-2 text-gray-700">
                 {tutor.description.split(" ").slice(0, 15).join(" ")}...
               </p>{" "}
@@ -146,7 +146,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
           )} */}
         </div>
 
-        <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-white shadow-lg w-full md:w-2/12 h-full card">
+        <div className="md:group-hover:flex hidden group-hover:hidden top-0 -right-4 absolute justify-center items-center bg-gray-400 shadow-lg w-full md:w-2/12 h-full card">
           <div className="flex flex-col items-center gap-2 p-2 card">
             <img
               className="rounded-xl w-full h-32 box"
@@ -156,7 +156,7 @@ const TutorCard = ({ tutor, user, handleDelete }) => {
             <Link
               to={"/tutor/details"}
               state={{ tutor }}
-              className="btn-outline w-full btn btn-sm"
+              className="btn-outline w-full text-black btn btn-sm"
             >
               View Details
             </Link>

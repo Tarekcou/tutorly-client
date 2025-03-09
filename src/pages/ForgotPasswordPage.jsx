@@ -37,18 +37,18 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gray-100 min-h-screen">
+    <div className="flex justify-center items-center min-h-screen">
       {isLoading ? (
         <Loading />
       ) : (
         <>
-          <div className="bg-white shadow-lg p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12">
-            <h2 className="font-bold text-3xl text-center text-green-700">
+          <div className="shadow-lg p-8 rounded-lg w-11/12 md:w-8/12 lg:w-6/12">
+            <h2 className="font-bold text-green-700 text-3xl text-center">
               Reset Password
             </h2>
             <form onSubmit={handleResetPassword} className="mt-6">
               <div className="mb-4">
-                <label htmlFor="email" className="block text-gray-700">
+                <label htmlFor="email" className="block">
                   Email
                 </label>
                 <input
@@ -57,13 +57,13 @@ const ForgotPasswordPage = () => {
                   value={location.state?.email ? location.state.email : email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-500 w-full focus:outline-none"
+                  className="mt-2 px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500 w-full"
                 />
               </div>
 
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg w-full text-white focus:outline-none"
+                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg focus:outline-none w-full text-white"
               >
                 Reset
               </button>

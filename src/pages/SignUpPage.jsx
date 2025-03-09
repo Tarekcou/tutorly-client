@@ -155,7 +155,7 @@ const SignUpPage = () => {
             </h2>
             <form onSubmit={handleRegister} className="mt-6">
               <div className="mb-4">
-                <label htmlFor="name" className="block text-gray-700">
+                <label htmlFor="name" className="block">
                   Name
                 </label>
                 <input
@@ -173,7 +173,7 @@ const SignUpPage = () => {
                 )}
               </div>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-gray-700">
+                <label htmlFor="email" className="block">
                   Email
                 </label>
                 <input
@@ -186,7 +186,7 @@ const SignUpPage = () => {
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="password" className="block text-gray-700">
+                <label htmlFor="password" className="block">
                   Password
                 </label>
                 <div className="relative">
@@ -221,7 +221,7 @@ const SignUpPage = () => {
                 </div>
               </div>
               <div className="mb-4">
-                <label htmlFor="password" className="block text-gray-700">
+                <label htmlFor="password" className="block">
                   Photo Url
                 </label>
                 <input

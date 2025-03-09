@@ -158,7 +158,7 @@ const FindAllTutors = () => {
           {/* Filters Section */}
           <div className="flex md:flex-row flex-col flex-wrap gap-4 mb-8">
             <div className="flex-1">
-              <label className="block text-gray-700">Language:</label>
+              <label className="block">Language:</label>
               <select
                 value={language}
                 onChange={(e) => {
@@ -179,7 +179,7 @@ const FindAllTutors = () => {
             </div>
 
             <div className="flex-1">
-              <label className="block text-gray-700">Price (Max):</label>
+              <label className="block">Price (Max):</label>
               <input
                 type="range"
                 min="1"
@@ -188,11 +188,11 @@ const FindAllTutors = () => {
                 onChange={(e) => setMaxPrice(e.target.value)}
                 className="w-full"
               />
-              <span className="block mt-2 text-gray-700">${maxPrice}</span>
+              <span className="block mt-2">${maxPrice}</span>
             </div>
 
             <div className="flex-1">
-              <label className="block text-gray-700">Country:</label>
+              <label className="block">Country:</label>
               <select
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
@@ -208,7 +208,7 @@ const FindAllTutors = () => {
             </div>
 
             <div className="flex-1">
-              <label className="block text-gray-700">Search:</label>
+              <label className="block">Search:</label>
               <input
                 type="text"
                 value={keyword}

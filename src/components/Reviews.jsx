@@ -105,9 +105,7 @@ const Reviews = () => {
                     <FaStar className="opacity-50 text-yellow-500" />
                   )}
                 </div>
-                <p className="text-gray-600 text-lg italic">
-                  "{review.review.message}"
-                </p>
+                <p className="text-lg italic">"{review.review.message}"</p>
               </div>
             </div>
           </SwiperSlide>

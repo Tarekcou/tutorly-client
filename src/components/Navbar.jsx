@@ -134,30 +134,21 @@ const Navbar = () => {
   );
   const navMenu = (
     <div className="flex lg:flex-row flex-col justify-center gap-2 text-white">
-      <NavLink to="/" className="bg-white btn-outline btn btn-sm">
+      <NavLink to="/" className="bg-white btn-outline text-black btn btn-sm">
         Home
       </NavLink>
-      <NavLink to="/find-tutors" className="bg-white btn-outline btn btn-sm">
+      <NavLink
+        to="/find-tutors"
+        className="bg-white btn-outline text-black btn btn-sm"
+      >
         Find Tutors
       </NavLink>
 
       {user ? (
         <div className="flex lg:flex-row flex-col gap-2">
-          {/* <NavLink
-            to="/addTutorials"
-            className="bg-white btn-outline btn btn-sm"
-          >
-            Add Tutorials
-          </NavLink>
-          <NavLink
-            to={`/myTutorials/${user.email}`}
-            className="bg-white btn-outline btn btn-sm"
-          >
-            My Tutorials
-          </NavLink> */}
           <NavLink
             to={`/booked-tutors/${user.email}`}
-            className="bg-white btn-outline btn btn-sm"
+            className="bg-white btn-outline text-black btn btn-sm"
           >
             My Booked Tutors
           </NavLink>
@@ -165,21 +156,21 @@ const Navbar = () => {
           {isAdmin ? (
             <NavLink
               to={`/admin-dashboard`}
-              className="bg-white btn-outline btn btn-sm"
+              className="bg-white btn-outline text-black btn btn-sm"
             >
               Admin Dashboard
             </NavLink>
           ) : isTutor ? (
             <NavLink
               to={`/dashboard`}
-              className="bg-white btn-outline btn btn-sm"
+              className="bg-white btn-outline text-black btn btn-sm"
             >
               Dashboard
             </NavLink>
           ) : (
             <NavLink
               to={`/become-tutor`}
-              className="bg-white btn-outline btn btn-sm"
+              className="bg-white btn-outline text-black btn btn-sm"
             >
               Become a Tutor
             </NavLink>
@@ -188,7 +179,10 @@ const Navbar = () => {
       ) : (
         ""
       )}
-      <NavLink to={`/contact`} className="bg-white btn-outline btn btn-sm">
+      <NavLink
+        to={`/contact`}
+        className="bg-white btn-outline text-black btn btn-sm"
+      >
         Contact
       </NavLink>
     </div>
